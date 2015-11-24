@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="wei.learn.gef.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RCP Perspective"
+            class="wei.learn.gef.Perspective"
+            id="wei.learn.gef.perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="wei.learn.gef.ui.DiagramEditor"
+            default="false"
+            icon="icons/alt_window16.gif"
+            id="wei.learn.gef.DiagramEditor"
+            name="Diagram Editor">
+      </editor>
+   </extension>
+
+</plugin>
