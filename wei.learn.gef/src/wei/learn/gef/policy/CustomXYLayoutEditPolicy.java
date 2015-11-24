@@ -8,13 +8,21 @@ import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 
 import wei.learn.gef.command.ChangeConstraintCommand;
+import wei.learn.gef.command.CreateCommand;
+import wei.learn.gef.model.HelloModel;
 
 public class CustomXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		CreateCommand command = new CreateCommand();
+		//产生创建图形的尺寸和位置
+		Rectangle constraint = (Rectangle) getConstraintFor(request);
+		HelloModel model = (HelloModel) request.getNewObject();
+		model.setConstraint(constraint);
+		command.setContentsModel(getHost().getModel());
+		command.setHelloModel(model);
+		return command;
 	}
 
 	protected Command createChangeConstraintCommand(EditPart child,
