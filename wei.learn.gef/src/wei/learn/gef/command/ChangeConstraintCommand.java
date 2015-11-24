@@ -1,0 +1,23 @@
+package wei.learn.gef.command;
+
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.commands.Command;
+
+import wei.learn.gef.model.HelloModel;
+
+
+public class ChangeConstraintCommand extends Command {
+	private HelloModel helloModel;
+	private Rectangle constraint;
+	@Override
+	public void execute() {
+		helloModel.setConstraint(constraint);
+	}
+	public void setConstraint(Rectangle rect) {
+		this.constraint = rect;
+	}
+	public void setModel(Object model)
+	{
+		helloModel=(HelloModel) model;
+	}
+}

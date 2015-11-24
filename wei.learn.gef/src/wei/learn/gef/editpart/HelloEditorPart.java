@@ -1,5 +1,7 @@
 package wei.learn.gef.editpart;
 
+import java.beans.PropertyChangeEvent;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.IFigure;
@@ -8,11 +10,10 @@ import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 import wei.learn.gef.model.HelloModel;
 
-public class HelloEditorPart extends AbstractGraphicalEditPart {
+public class HelloEditorPart extends EditPartWithListener {
 
 	@Override
 	protected IFigure createFigure() {
@@ -33,7 +34,15 @@ public class HelloEditorPart extends AbstractGraphicalEditPart {
 		// TODO Auto-generated method stub
 
 	}
-
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		String propertyName = evt.getPropertyName();
+		if(propertyName.equals(HelloModel.P_CONSTRAINT))
+		{
+			refreshVisuals();
+		}
+	}
 	@Override
 	protected void refreshVisuals() {
 		Rectangle constraint = ((HelloModel) getModel()).getConstraint();

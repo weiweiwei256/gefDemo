@@ -5,9 +5,11 @@ import java.util.List;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 import wei.learn.gef.model.ContentsModel;
+import wei.learn.gef.policy.CustomXYLayoutEditPolicy;
 
 public class ContentsEditPart extends AbstractGraphicalEditPart {
 
@@ -20,8 +22,7 @@ public class ContentsEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected void createEditPolicies() {
-		// TODO Auto-generated method stub
-
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CustomXYLayoutEditPolicy());
 	}
 	@Override
 	protected List<Object> getModelChildren() {

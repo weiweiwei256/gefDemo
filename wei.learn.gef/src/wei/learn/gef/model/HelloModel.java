@@ -2,10 +2,10 @@ package wei.learn.gef.model;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
-public class HelloModel {
+public class HelloModel extends AbstractModel{
 	private String text="Hello world";
 	private Rectangle constraint;
-
+	public static final String P_CONSTRAINT="_constraint";
 	public String getText() {
 		return text;
 	}
@@ -20,6 +20,7 @@ public class HelloModel {
 
 	public void setConstraint(Rectangle constraint) {
 		this.constraint = constraint;
+		firePropertyChange(P_CONSTRAINT, null, constraint);
 	}
 	
 }
