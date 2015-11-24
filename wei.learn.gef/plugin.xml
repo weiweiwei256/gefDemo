@@ -23,6 +23,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="wei.learn.gef.ui.DiagramEditor"
+            contributorClass="wei.learn.gef.action.DiagramActionBarContributor"
             default="false"
             icon="icons/alt_window16.gif"
             id="wei.learn.gef.DiagramEditor"
