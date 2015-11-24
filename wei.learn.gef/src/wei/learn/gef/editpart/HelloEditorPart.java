@@ -9,9 +9,11 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 
 import wei.learn.gef.model.HelloModel;
+import wei.learn.gef.policy.CustomComponentEditPolicy;
 
 public class HelloEditorPart extends EditPartWithListener {
 
@@ -31,18 +33,18 @@ public class HelloEditorPart extends EditPartWithListener {
 
 	@Override
 	protected void createEditPolicies() {
-		// TODO Auto-generated method stub
-
+		installEditPolicy(EditPolicy.COMPONENT_ROLE,
+				new CustomComponentEditPolicy());
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
-		if(propertyName.equals(HelloModel.P_CONSTRAINT))
-		{
+		if (propertyName.equals(HelloModel.P_CONSTRAINT)) {
 			refreshVisuals();
 		}
 	}
+
 	@Override
 	protected void refreshVisuals() {
 		Rectangle constraint = ((HelloModel) getModel()).getConstraint();

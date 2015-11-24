@@ -1,17 +1,17 @@
 package wei.learn.gef.editpart;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.policy.CustomXYLayoutEditPolicy;
 
-public class ContentsEditPart extends AbstractGraphicalEditPart {
+public class ContentsEditPart extends EditPartWithListener {
 
 	@Override
 	protected IFigure createFigure() {
@@ -27,5 +27,14 @@ public class ContentsEditPart extends AbstractGraphicalEditPart {
 	@Override
 	protected List<Object> getModelChildren() {
 		return ((ContentsModel)getModel()).getChildren();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		String propertyName = evt.getPropertyName();
+		if(propertyName.equals(ContentsModel.P_CHILDREN))
+		{
+			refreshChildren();
+		}
 	}
 }
