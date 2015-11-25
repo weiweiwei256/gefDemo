@@ -4,6 +4,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.KeyHandler;
+import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.palette.ConnectionCreationToolEntry;
 import org.eclipse.gef.palette.CreationToolEntry;
 import org.eclipse.gef.palette.MarqueeToolEntry;
@@ -13,8 +15,14 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.SelectionToolEntry;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gef.requests.SimpleFactory;
+import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.DirectEditAction;
+import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithPalette;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import wei.gef.learn.helper.IImageKeys;
@@ -40,6 +48,14 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		super.configureGraphicalViewer();
 		viewer = getGraphicalViewer();
 		viewer.setEditPartFactory(new PartFactory());
+		//创建键盘句柄keyHander
+		KeyHandler keyHandler = new KeyHandler();
+		
+		//按DEL键时执行删除Action
+		keyHandler.put(KeyStroke.getPressed(SWT.DEL, 127,0), getActionRegistry().getAction(GEFActionConstants.DELETE));
+		//按F2键时执行直接编辑Action
+		keyHandler.put(KeyStroke.getPressed(SWT.F2, 0), getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
+		getGraphicalViewer().setKeyHandler(keyHandler);
 	}
 
 	@Override
@@ -135,5 +151,17 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 //        root.add(ArrowConnectionDrawer);
 //        root.add(mergeLineDrawer);
         return root;
+	}
+	@Override
+	protected void createActions() {
+		super.createActions();
+		ActionRegistry registry = getActionRegistry();
+		
+		//创建并注册一个DirectEditAction
+		IAction action = new DirectEditAction((IWorkbenchPart)this);
+		registry.registerAction(action);
+		
+		//当一个action需要由选择对象更新时,需要注册其ID  ??
+		getSelectionActions().add(action.getId());
 	}
 }
