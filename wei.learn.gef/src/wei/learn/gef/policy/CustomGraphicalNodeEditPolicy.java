@@ -6,6 +6,7 @@ import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.gef.requests.ReconnectRequest;
 
 import wei.learn.gef.command.CreateConnectionCommand;
+import wei.learn.gef.command.ReconnectConnectionCommand;
 //ide中对应类： GraphicalNodePolicy
 public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy
 {
@@ -28,34 +29,23 @@ public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy
         return command;
     }
 
-	@Override
-	protected Command getReconnectTargetCommand(ReconnectRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	protected Command getReconnectSourceCommand(ReconnectRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    protected Command getReconnectSourceCommand(ReconnectRequest request)
+    {
+        ReconnectConnectionCommand command = new ReconnectConnectionCommand();
+        command.setConnectionModel(request.getConnectionEditPart().getModel());
+        command.setNewSource(getHost().getModel());
+        return command;
+    }
 
-//    @Override
-//    protected Command getReconnectSourceCommand(ReconnectRequest request)
-//    {
-//        ReconnectConnectionCommand command = new ReconnectConnectionCommand();
-//        command.setConnectionModel(request.getConnectionEditPart().getModel());
-//        command.setNewSource(getHost().getModel());
-//        return command;
-//    }
-//
-//    @Override
-//    protected Command getReconnectTargetCommand(ReconnectRequest request)
-//    {
-//        ReconnectConnectionCommand command = new ReconnectConnectionCommand();
-//        command.setConnectionModel(request.getConnectionEditPart().getModel());
-//        command.setNewTarget(getHost().getModel());
-//        return command;
-//    }
+    @Override
+    protected Command getReconnectTargetCommand(ReconnectRequest request)
+    {
+        ReconnectConnectionCommand command = new ReconnectConnectionCommand();
+        command.setConnectionModel(request.getConnectionEditPart().getModel());
+        command.setNewTarget(getHost().getModel());
+        return command;
+    }
 
 }
