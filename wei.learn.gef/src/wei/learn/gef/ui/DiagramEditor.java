@@ -3,6 +3,7 @@ package wei.learn.gef.ui;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
@@ -20,6 +21,7 @@ import org.eclipse.gef.palette.SelectionToolEntry;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.AlignmentAction;
 import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.ZoomInAction;
@@ -186,6 +188,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		return root;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
 		super.createActions();
@@ -197,7 +200,32 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 
 		// 当一个action需要由选择对象更新时,需要注册其ID ??
 		getSelectionActions().add(action.getId());
-	
+		// 水平方向对齐
+		action = new AlignmentAction((IWorkbenchPart) this,
+				PositionConstants.LEFT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		action = new AlignmentAction((IWorkbenchPart) this,
+				PositionConstants.CENTER);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		action = new AlignmentAction((IWorkbenchPart) this,
+				PositionConstants.RIGHT);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		// 垂直方向对齐
+		action = new AlignmentAction((IWorkbenchPart) this,
+				PositionConstants.TOP);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		action = new AlignmentAction((IWorkbenchPart) this,
+				PositionConstants.MIDDLE);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
+		action = new AlignmentAction((IWorkbenchPart) this,
+				PositionConstants.BOTTOM);
+		registry.registerAction(action);
+		getSelectionActions().add(action.getId());
 	}
 
 	public Object getAdapter(Class type) {
