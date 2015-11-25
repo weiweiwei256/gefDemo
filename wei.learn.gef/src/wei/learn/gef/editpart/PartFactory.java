@@ -23,7 +23,7 @@ public class PartFactory implements EditPartFactory {
 			return new HelloEditorPart();
 		} else if (model instanceof ContentsModel) {
 			return new ContentsEditPart();
-		}
+		} 
 		throw new RuntimeException("Can't create part for model element:"
 				+ ((model != null) ? model.getClass().getName() : "null"));
 	}

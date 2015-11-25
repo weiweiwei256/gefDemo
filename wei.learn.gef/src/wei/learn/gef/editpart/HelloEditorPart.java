@@ -42,6 +42,10 @@ public class HelloEditorPart extends EditPartWithListener {
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(HelloModel.P_CONSTRAINT)) {
 			refreshVisuals();
+		}else if(propertyName.equals(HelloModel.P_TEXT))
+		{
+			Label label = (Label) getFigure();
+			label.setText((String) evt.getNewValue());
 		}
 	}
 
