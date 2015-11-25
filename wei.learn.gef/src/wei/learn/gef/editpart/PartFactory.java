@@ -5,6 +5,7 @@ import org.eclipse.gef.EditPartFactory;
 
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.model.HelloModel;
+import wei.learn.gef.model.LineConnectionModel;
 
 //ide:GraphicalControlFactory
 public class PartFactory implements EditPartFactory {
@@ -23,7 +24,10 @@ public class PartFactory implements EditPartFactory {
 			return new HelloEditorPart();
 		} else if (model instanceof ContentsModel) {
 			return new ContentsEditPart();
-		} 
+		} else if(model instanceof LineConnectionModel)
+		{
+			return new LineConnectionEditPart();
+		}
 		throw new RuntimeException("Can't create part for model element:"
 				+ ((model != null) ? model.getClass().getName() : "null"));
 	}

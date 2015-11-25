@@ -1,16 +1,21 @@
 package wei.learn.gef.editpart;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
+import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
+import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -18,8 +23,10 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import wei.learn.gef.model.HelloModel;
 import wei.learn.gef.policy.CustomComponentEditPolicy;
 import wei.learn.gef.policy.CustomDirectEditPolicy;
+import wei.learn.gef.policy.CustomGraphicalNodeEditPolicy;
 
-public class HelloEditorPart extends EditPartWithListener {
+public class HelloEditorPart extends EditPartWithListener implements
+		NodeEditPart {
 
 	private CustomDirectEditManager directManager = null;
 
@@ -43,6 +50,7 @@ public class HelloEditorPart extends EditPartWithListener {
 				new CustomComponentEditPolicy());
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
 				new CustomDirectEditPolicy());
+		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new CustomGraphicalNodeEditPolicy());
 	}
 
 	@Override
@@ -53,6 +61,12 @@ public class HelloEditorPart extends EditPartWithListener {
 		} else if (propertyName.equals(HelloModel.P_TEXT)) {
 			Label label = (Label) getFigure();
 			label.setText((String) evt.getNewValue());
+		}else if(propertyName.equals(HelloModel.P_SOURCE_CONNECTION))
+		{
+			refreshSourceConnections();
+		}else if(propertyName.equals(HelloModel.P_TARGET_CONNECTION))
+		{
+			refreshTargetConnections();
 		}
 	}
 
@@ -80,5 +94,35 @@ public class HelloEditorPart extends EditPartWithListener {
 							getFigure()));
 		}
 		directManager.show();
+	}
+
+	@Override
+	public ConnectionAnchor getSourceConnectionAnchor(
+			ConnectionEditPart connection) {
+		return new ChopboxAnchor(getFigure());
+	}
+
+	@Override
+	public ConnectionAnchor getTargetConnectionAnchor(
+			ConnectionEditPart connection) {
+		return new ChopboxAnchor(getFigure());
+	}
+
+	@Override
+	public ConnectionAnchor getSourceConnectionAnchor(Request request) {
+		return new ChopboxAnchor(getFigure());
+	}
+
+	@Override
+	public ConnectionAnchor getTargetConnectionAnchor(Request request) {
+		return new ChopboxAnchor(getFigure());
+	}
+
+	protected List<Object> getModelSourceConnections() {
+		return ((HelloModel) getModel()).getModelSourceConnection();
+	}
+
+	public List<Object> getModelTargetConnections() {
+		return ((HelloModel) getModel()).getModelTargetConnection();
 	}
 }

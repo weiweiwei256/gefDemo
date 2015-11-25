@@ -1,5 +1,8 @@
 package wei.learn.gef.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
@@ -10,9 +13,14 @@ public class HelloModel extends AbstractModel {
 	public static final String P_CONSTRAINT = "_constraint";
 	// 添加字符串的ID 这样改变图形的文本时可通知其Editpart
 	public static final String P_TEXT = "_text";
-	// connection
+	 // connection
+    public static final String P_SOURCE_CONNECTION = "_source_connection";
+    public static final String P_TARGET_CONNECTION = "_target_connection";
+    // 用来储存以它为起始点和以它为终点的线
+    private List<Object> sourceConnection = new ArrayList<Object>();
+    private List<Object> targetConnection = new ArrayList<Object>();
 
-	public String getText() {
+    public String getText() {
 		return text;
 	}
 
@@ -28,6 +36,41 @@ public class HelloModel extends AbstractModel {
 	public void setConstraint(Rectangle constraint) {
 		this.constraint = constraint;
 		firePropertyChange(P_CONSTRAINT, null, constraint);
+	}
+
+	public void addSourceConnection(Object conn)
+	{
+	    sourceConnection.add(conn);
+	    firePropertyChange(P_SOURCE_CONNECTION, null, null);
+	
+	}
+
+	public void removeSourceConnection(Object conn)
+	{
+	    sourceConnection.remove(conn);
+	    firePropertyChange(P_SOURCE_CONNECTION, null, null);
+	}
+
+	public void addTargetConnection(Object conn)
+	{
+	    targetConnection.add(conn);
+	    firePropertyChange(P_TARGET_CONNECTION, null, null);
+	}
+
+	public void removeTargetConnection(Object conn)
+	{
+	    targetConnection.remove(conn);
+	    firePropertyChange(P_TARGET_CONNECTION, null, null);
+	}
+
+	public List<Object> getModelSourceConnection()
+	{
+	    return sourceConnection;
+	}
+
+	public List<Object> getModelTargetConnection()
+	{
+	    return targetConnection;
 	}
 
 	// 其实属性视图中用tableview来显示属性,第一列是属性名称,第2列是属性值.

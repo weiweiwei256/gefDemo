@@ -30,6 +30,7 @@ import wei.learn.gef.Application;
 import wei.learn.gef.editpart.PartFactory;
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.model.HelloModel;
+import wei.learn.gef.model.LineConnectionModel;
 
 public class DiagramEditor extends GraphicalEditorWithPalette {
 
@@ -112,15 +113,15 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
                         HelloModel.class), descriptor, descriptor);
         drawer.add(creationToolEntry);
 
-//        // 连线
-//        PaletteDrawer connectionDrawer = new PaletteDrawer("连线");
-//        ImageDescriptor newConnectionDescriptor = AbstractUIPlugin
-//                .imageDescriptorFromPlugin(Application.PLUGIN_ID,
-//                        IImageKeys.jiantou);
-//        ConnectionCreationToolEntry connCreationEntry = new ConnectionCreationToolEntry(
-//                "简单链接", "创建简单连接", new SimpleFactory(LineConnectionModel.class),
-//                newConnectionDescriptor, newConnectionDescriptor);
-//        connectionDrawer.add(connCreationEntry);
+        // 连线
+        PaletteDrawer connectionDrawer = new PaletteDrawer("连线");
+        ImageDescriptor newConnectionDescriptor = AbstractUIPlugin
+                .imageDescriptorFromPlugin(Application.PLUGIN_ID,
+                        IImageKeys.jiantou);
+        ConnectionCreationToolEntry connCreationEntry = new ConnectionCreationToolEntry(
+                "简单链接", "创建简单连接", new SimpleFactory(LineConnectionModel.class),
+                newConnectionDescriptor, newConnectionDescriptor);
+        connectionDrawer.add(connCreationEntry);
 
         // 箭头连线
 //        PaletteDrawer ArrowConnectionDrawer = new PaletteDrawer("箭头连线");
@@ -147,7 +148,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
         // 7.0 最后将创建的两组工具加到root上
         root.add(toolGroup);
         root.add(drawer);
-//        root.add(connectionDrawer);
+        root.add(connectionDrawer);
 //        root.add(ArrowConnectionDrawer);
 //        root.add(mergeLineDrawer);
         return root;
