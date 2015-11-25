@@ -2,6 +2,7 @@ package wei.learn.gef.helper;
 
 import galaxy.ide.configurable.editor.gef.router.AStarConnectionRouter2;
 
+import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
@@ -21,6 +22,7 @@ public class Utility
 //                        | AStarConnectionRouter2.SHOWPOOL
                         | AStarConnectionRouter2.FOUR_DIR);
         return router;
+//    	return new BendpointConnectionRouter();
     }
 
     public static IEditorPart getCurrentEditor()

@@ -3,6 +3,7 @@ package galaxy.ide.configurable.editor.gef.router;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +29,8 @@ import wei.learn.gef.ui.DiagramEditor;
  * @author caiyu
  * @date 2014-5-15
  */
-public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyle {
+public class AStarConnectionRouter2 extends AbstractRouter implements
+		RouterStyle {
 
 	private DiagramEditor editor;
 	/**
@@ -60,16 +62,20 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		this.editor = (DiagramEditor) editor;
 		D = gridLength;
 		this.style = style;
-		manager = (LayerManager) this.editor.getGraphicalViewer().getEditPartRegistry().get(LayerManager.ID);
-		layer = (FreeformLayer) manager.getLayer(org.eclipse.gef.LayerConstants.HANDLE_LAYER);
+		manager = (LayerManager) this.editor.getGraphicalViewer()
+				.getEditPartRegistry().get(LayerManager.ID);
+		layer = (FreeformLayer) manager
+				.getLayer(org.eclipse.gef.LayerConstants.HANDLE_LAYER);
 	}
 
-	private void search(ANode node, List<ANode> openList, List<ANode> closedList, ANode startNode, ANode endNode) {
+	private void search(ANode node, List<ANode> openList,
+			List<ANode> closedList, ANode startNode, ANode endNode) {
 		ANode[] nodes = findAroundNode(node);
 		for (int i = 0, len = nodes.length; i < len; i++) {
 			if (nodes[i].getLevel() == ANodeLevel.DEAD)
 				continue;
-			nodes[i].g = (i <= 3 ? nodes[i].getLevel().RE : nodes[i].getLevel().BE) + node.g;
+			nodes[i].g = (i <= 3 ? nodes[i].getLevel().RE
+					: nodes[i].getLevel().BE) + node.g;
 			nodes[i].h = caculateH(nodes[i], endNode);
 			if (closedList.contains(nodes[i]))
 				continue;
@@ -92,7 +98,9 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 	}
 
 	private int caculateH(ANode p, ANode endNode) {
-		return (Math.abs(endNode.xIndex - p.xIndex) + Math.abs(endNode.yIndex - p.yIndex)) * p.getLevel().RE;
+		return (Math.abs(endNode.xIndex - p.xIndex) + Math.abs(endNode.yIndex
+				- p.yIndex))
+				* p.getLevel().RE;
 	}
 
 	@Override
@@ -123,8 +131,10 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 
 		// 将终点至于图源的外侧
 		if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {
-			System.err.println("终点在坐标系中的位置：" + "xIndex:" + endNode.xIndex + "yIndex:" + endNode.yIndex);
-			System.out.println("------------------------search List-----------------------------------------");
+			System.err.println("终点在坐标系中的位置：" + "xIndex:" + endNode.xIndex
+					+ "yIndex:" + endNode.yIndex);
+			System.out
+					.println("------------------------search List-----------------------------------------");
 		}
 		preReadingNodes();
 
@@ -140,8 +150,10 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 			if (minFNode == null || minFNode.equals(endNode))
 				break;
 			if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {
-				System.out.println("NO: " + i + "    position:(" + minFNode.xIndex + "," + minFNode.yIndex + ")   f():"
-						+ minFNode.f() + " g:" + minFNode.g + " h:" + minFNode.h);
+				System.out.println("NO: " + i + "    position:("
+						+ minFNode.xIndex + "," + minFNode.yIndex + ")   f():"
+						+ minFNode.f() + " g:" + minFNode.g + " h:"
+						+ minFNode.h);
 			}
 			search(minFNode, openList, closedList, startNode, endNode);
 		}
@@ -159,9 +171,11 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 			aPathList.addPoint(tempNode.getPoint(startPoint, D));
 			// 输出路径
 			if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {
-				System.err.println("---------------------------route----------------------------------");
+				System.err
+						.println("---------------------------route----------------------------------");
 				System.err.println("倒序");
-				System.err.println("xIndex:" + tempNode.xIndex + "  yIndex:" + tempNode.yIndex);
+				System.err.println("xIndex:" + tempNode.xIndex + "  yIndex:"
+						+ tempNode.yIndex);
 			}
 			while (true) {
 				tempNode = tempNode.getParent();
@@ -169,7 +183,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 					break;
 				aPathList.insertPoint(tempNode.getPoint(startPoint, D), 0);
 				if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {
-					System.err.println("xIndex:" + tempNode.xIndex + "  yIndex:" + tempNode.yIndex);
+					System.err.println("xIndex:" + tempNode.xIndex
+							+ "  yIndex:" + tempNode.yIndex);
 				}
 			}
 		}
@@ -181,7 +196,7 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		aPathList.addPoint(endPoint);
 		// 将a*算法产生的集合分别加入到AStarCheckedPointList 终点直接在下面添加 无需备选
 		for (int j = 0; j < aPathList.size() - 1; j++) {
-//			System.out.println("con:"+connection.hashCode()+"NO:"+j+" points:"+aPathList.getPoint(j));
+			// System.out.println("con:"+connection.hashCode()+"NO:"+j+" points:"+aPathList.getPoint(j));
 			points.addCandidatePoint(aPathList.getPoint(j));
 		}
 		points.addCandidatePoint(endPoint);
@@ -252,10 +267,12 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		// 移除之前的oldHandlers
 		removeOldHandles(layer, PoolHandler.class);
 		List<ANode> poolList = new ArrayList<ANode>();
-		for (Map.Entry<Integer, Map<Integer, ANodeLevel>> entrySet : pool.entrySet()) {
+		for (Map.Entry<Integer, Map<Integer, ANodeLevel>> entrySet : pool
+				.entrySet()) {
 			int x = entrySet.getKey();
 			Map<Integer, ANodeLevel> valueMap = entrySet.getValue();
-			for (Map.Entry<Integer, ANodeLevel> valueEntry : valueMap.entrySet()) {
+			for (Map.Entry<Integer, ANodeLevel> valueEntry : valueMap
+					.entrySet()) {
 				int y = valueEntry.getKey();
 				ANodeLevel level = valueEntry.getValue();
 				ANode node = new ANode(x, y);
@@ -268,7 +285,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 			PoolHandler h = new PoolHandler();
 			h.level = poolNode.getLevel();
 			h.setBounds(new Rectangle(p.x, p.y, 5, 5));
-			h.setOwner((GraphicalEditPart) editor.getGraphicalViewer().getContents());
+			h.setOwner((GraphicalEditPart) editor.getGraphicalViewer()
+					.getContents());
 			layer.add(h);
 		}
 
@@ -310,7 +328,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 	 * @param closedList
 	 * @param startPoint
 	 */
-	private void test(List<ANode> openList, List<ANode> closedList, Point startPoint) {
+	private void test(List<ANode> openList, List<ANode> closedList,
+			Point startPoint) {
 		if ((this.style & TEST) != TEST)
 			return;
 		removeOldHandles(layer, TestHandler.class);
@@ -320,7 +339,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 			TestHandler h = new TestHandler();
 			h.open = true;
 			h.setBounds(new Rectangle(p.x, p.y, D, D));
-			h.setOwner((GraphicalEditPart) editor.getGraphicalViewer().getContents());
+			h.setOwner((GraphicalEditPart) editor.getGraphicalViewer()
+					.getContents());
 			layer.add(h);
 		}
 		for (ANode openNode : closedList) {
@@ -330,7 +350,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 			TestHandler h = new TestHandler();
 			h.open = false;
 			h.setBounds(new Rectangle(p.x, p.y, D, D));
-			h.setOwner((GraphicalEditPart) editor.getGraphicalViewer().getContents());
+			h.setOwner((GraphicalEditPart) editor.getGraphicalViewer()
+					.getContents());
 			layer.add(h);
 		}
 	}
@@ -339,7 +360,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 	private void removeOldHandles(FreeformLayer layer, Class<?> clazz) {
 		List<Figure> removeFigures = new ArrayList<Figure>();
 		List<Object> layerFigure = layer.getChildren();
-		for (Iterator<Object> iterator = layerFigure.iterator(); iterator.hasNext();) {
+		for (Iterator<Object> iterator = layerFigure.iterator(); iterator
+				.hasNext();) {
 			Object object = (Object) iterator.next();
 			if (clazz == TestHandler.class) {
 				if (object instanceof TestHandler) {
@@ -355,7 +377,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 				// do nothing
 			}
 		}
-		for (Iterator<Figure> iterator = removeFigures.iterator(); iterator.hasNext();) {
+		for (Iterator<Figure> iterator = removeFigures.iterator(); iterator
+				.hasNext();) {
 			Figure object = (Figure) iterator.next();
 			layer.remove(object);
 		}
@@ -370,7 +393,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 	 * @param points
 	 */
 	public void floyd(ANode node, Point startPoint, int D) {
-		if ((this.style & FLOYD_SIMPLIFY) != FLOYD_SIMPLIFY && (this.style & FLOYD) != FLOYD)
+		if ((this.style & FLOYD_SIMPLIFY) != FLOYD_SIMPLIFY
+				&& (this.style & FLOYD) != FLOYD)
 			return;
 		ANode fatherNode, currentNode = node, grandNode;
 		// 去除共线
@@ -382,8 +406,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 			if (grandNode == null)
 				break;
 			// 删除共线终点 根据相似三角形 x1/y1=x2/y2 根据： x1y2=x2y1 判断
-			// 			 /|
-			// 			/ |
+			// /|
+			// / |
 			// / |
 			// / |y2
 			// /| |
@@ -392,7 +416,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 			// /___|___|
 			// x1
 			// |--x2---|
-			if ((fatherNode.xIndex - currentNode.xIndex) * (grandNode.yIndex - currentNode.yIndex) == (grandNode.xIndex - currentNode.xIndex)
+			if ((fatherNode.xIndex - currentNode.xIndex)
+					* (grandNode.yIndex - currentNode.yIndex) == (grandNode.xIndex - currentNode.xIndex)
 					* (fatherNode.yIndex - currentNode.yIndex)) {
 				currentNode.setParent(grandNode);
 			} else
@@ -422,12 +447,14 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		}
 	}
 
-	private boolean linkable(final ANode firstNode, final ANode lastNode, final Point startPoint, final int D) {
+	private boolean linkable(final ANode firstNode, final ANode lastNode,
+			final Point startPoint, final int D) {
 		Point firstPoint = firstNode.getPoint(startPoint, D);
 		Point lastPoint = lastNode.getPoint(startPoint, D);
 		for (Object c : editor.getGraphicalViewer().getContents().getChildren()) {
 			if (c instanceof GraphicalEditPart) {
-				if (intersects(((GraphicalEditPart) c).getFigure().getBounds(), firstPoint, lastPoint)) {
+				if (intersects(((GraphicalEditPart) c).getFigure().getBounds(),
+						firstPoint, lastPoint)) {
 					return false;
 				}
 			}
@@ -446,22 +473,26 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 	private boolean intersects(Rectangle r, Point fp, Point lp) {
 		if (r.contains(fp) || r.contains(lp))
 			return true;
-		int diagonal1x1 = r.x, diagonal1y1 = r.y, diagonal1x2 = r.x + r.width, diagonal1y2 = r.y + r.height, diagonal2x1 = r.x
-				+ r.width, diagonal2y1 = r.y, diagonal2x2 = r.x, diagonal2y2 = r.y + r.height;
+		int diagonal1x1 = r.x, diagonal1y1 = r.y, diagonal1x2 = r.x + r.width, diagonal1y2 = r.y
+				+ r.height, diagonal2x1 = r.x + r.width, diagonal2y1 = r.y, diagonal2x2 = r.x, diagonal2y2 = r.y
+				+ r.height;
 
-		if (Geometry.linesIntersect(diagonal1x1, diagonal1y1, diagonal1x2, diagonal1y2, fp.x, fp.y, lp.x, lp.y)
-				|| Geometry.linesIntersect(diagonal2x1, diagonal2y1, diagonal2x2, diagonal2y2, fp.x, fp.y, lp.x, lp.y))
+		if (Geometry.linesIntersect(diagonal1x1, diagonal1y1, diagonal1x2,
+				diagonal1y2, fp.x, fp.y, lp.x, lp.y)
+				|| Geometry.linesIntersect(diagonal2x1, diagonal2y1,
+						diagonal2x2, diagonal2y2, fp.x, fp.y, lp.x, lp.y))
 			return true;
 		return false;
 	}
 
-/*	private boolean getOnOffMergeLine() {
-		// 从配置中读取设置的值 默认值为false
-		Preferences onOffMergeLinePregerences = ConfigurationScope.INSTANCE
-				.getNode("cn.com.agree.ide.commons.floweditor.onoffmergeline");
-		boolean onOff = onOffMergeLinePregerences.getBoolean(IFlowConstants.KEY_ONOFF_MERGELINE, false);
-		return onOff;
-	}*/
+	/*
+	 * private boolean getOnOffMergeLine() { // 从配置中读取设置的值 默认值为false Preferences
+	 * onOffMergeLinePregerences = ConfigurationScope.INSTANCE
+	 * .getNode("cn.com.agree.ide.commons.floweditor.onoffmergeline"); boolean
+	 * onOff =
+	 * onOffMergeLinePregerences.getBoolean(IFlowConstants.KEY_ONOFF_MERGELINE,
+	 * false); return onOff; }
+	 */
 
 	/**
 	 * 从开启列表里找到最小F值
@@ -481,5 +512,33 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		public int compare(ANode p1, ANode p2) {
 			return p1.f() < p2.f() ? -1 : 1;
 		}
+	}
+
+	// 重写bendpointCOnnnectionRouter的方法
+	private Map<Connection, Object> constraints = new HashMap<Connection, Object>(11);
+
+	/**
+	 * Gets the constraint for the given {@link Connection}.
+	 * 
+	 * @param connection
+	 *            The connection whose constraint we are retrieving
+	 * @return The constraint
+	 */
+	public Object getConstraint(Connection connection) {
+		return constraints.get(connection);
+	}
+
+	/**
+	 * Removes the given connection from the map of constraints.
+	 * 
+	 * @param connection
+	 *            The connection to remove
+	 */
+	public void remove(Connection connection) {
+		constraints.remove(connection);
+	}
+
+	public void setConstraint(Connection connection, Object constraint) {
+		constraints.put(connection, constraint);
 	}
 }
