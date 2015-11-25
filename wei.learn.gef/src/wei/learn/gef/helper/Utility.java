@@ -1,4 +1,4 @@
-package wei.gef.learn.helper;
+package wei.learn.gef.helper;
 
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.ui.IEditorPart;

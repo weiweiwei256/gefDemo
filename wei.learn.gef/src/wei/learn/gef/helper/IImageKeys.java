@@ -1,4 +1,4 @@
-package wei.gef.learn.helper;
+package wei.learn.gef.helper;
 
 public interface IImageKeys
 {
