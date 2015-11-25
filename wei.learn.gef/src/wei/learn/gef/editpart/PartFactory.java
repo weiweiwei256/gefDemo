@@ -3,6 +3,7 @@ package wei.learn.gef.editpart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
+import wei.learn.gef.model.ArrowConnectionModel;
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.model.HelloModel;
 import wei.learn.gef.model.LineConnectionModel;
@@ -27,6 +28,9 @@ public class PartFactory implements EditPartFactory {
 		} else if(model instanceof LineConnectionModel)
 		{
 			return new LineConnectionEditPart();
+		}else if(model instanceof ArrowConnectionModel)
+		{
+			return new ArrowConnectionEditPart();
 		}
 		throw new RuntimeException("Can't create part for model element:"
 				+ ((model != null) ? model.getClass().getName() : "null"));

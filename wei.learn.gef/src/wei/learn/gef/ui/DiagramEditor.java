@@ -28,6 +28,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import wei.gef.learn.helper.IImageKeys;
 import wei.learn.gef.Application;
 import wei.learn.gef.editpart.PartFactory;
+import wei.learn.gef.model.ArrowConnectionModel;
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.model.HelloModel;
 import wei.learn.gef.model.LineConnectionModel;
@@ -124,15 +125,15 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
         connectionDrawer.add(connCreationEntry);
 
         // 箭头连线
-//        PaletteDrawer ArrowConnectionDrawer = new PaletteDrawer("箭头连线");
-//        ImageDescriptor newArrowConnectionDescriptor = AbstractUIPlugin
-//                .imageDescriptorFromPlugin(Application.PLUGIN_ID,
-//                        IImageKeys.model);
-//        ConnectionCreationToolEntry arrowConnCreationEntry = new ConnectionCreationToolEntry(
-//                "箭头链接", "创建箭头连接",
-//                new SimpleFactory(ArrowConnectionModel.class),
-//                newArrowConnectionDescriptor, newArrowConnectionDescriptor);
-//        ArrowConnectionDrawer.add(arrowConnCreationEntry);
+        PaletteDrawer ArrowConnectionDrawer = new PaletteDrawer("箭头连线");
+        ImageDescriptor newArrowConnectionDescriptor = AbstractUIPlugin
+                .imageDescriptorFromPlugin(Application.PLUGIN_ID,
+                        IImageKeys.model);
+        ConnectionCreationToolEntry arrowConnCreationEntry = new ConnectionCreationToolEntry(
+                "箭头链接", "创建箭头连接",
+                new SimpleFactory(ArrowConnectionModel.class),
+                newArrowConnectionDescriptor, newArrowConnectionDescriptor);
+        ArrowConnectionDrawer.add(arrowConnCreationEntry);
 //        
 //        //汇聚节点
 //        PaletteDrawer mergeLineDrawer = new PaletteDrawer("汇聚节点");
@@ -149,7 +150,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
         root.add(toolGroup);
         root.add(drawer);
         root.add(connectionDrawer);
-//        root.add(ArrowConnectionDrawer);
+        root.add(ArrowConnectionDrawer);
 //        root.add(mergeLineDrawer);
         return root;
 	}
