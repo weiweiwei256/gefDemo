@@ -49,7 +49,8 @@ public class DiagramEditorInput implements IPathEditorInput
         return null;
     }
 
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public Object getAdapter(Class adapter)
     {
         // TODO Auto-generated method stub

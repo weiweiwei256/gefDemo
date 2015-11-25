@@ -11,6 +11,7 @@ public class CustomDirectEditManager extends DirectEditManager {
 
 	private HelloModel helloModel; // 想要修改该模型的文本属性
 
+	@SuppressWarnings("rawtypes")
 	public CustomDirectEditManager(GraphicalEditPart source, Class editorType,
 			CellEditorLocator locator) {
 		super(source, editorType, locator);

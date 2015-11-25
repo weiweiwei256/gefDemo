@@ -18,7 +18,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     
     public void preWindowOpen() {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        configurer.setInitialSize(new Point(400, 300));
+        configurer.setInitialSize(new Point(1300, 1000));
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(true);
         configurer.setTitle("Hello RCP"); //$NON-NLS-1$

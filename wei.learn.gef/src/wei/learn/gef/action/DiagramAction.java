@@ -24,7 +24,8 @@ public class DiagramAction extends Action implements IWorkbenchAction,
 {
     private final IWorkbenchWindow window;
     public final static String ID = "wei.learn.gef.DiagramAction";
-    private IStructuredSelection selection;
+    @SuppressWarnings("unused")
+	private IStructuredSelection selection;
     public DiagramAction()
     {
        window = null;

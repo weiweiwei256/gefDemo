@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.EventObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.parts.ScrollableThumbnail;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.palette.ConnectionCreationToolEntry;
@@ -27,13 +31,25 @@ import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
+import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithPalette;
+import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import wei.learn.gef.Application;
 import wei.learn.gef.editpart.PartFactory;
@@ -42,6 +58,7 @@ import wei.learn.gef.model.ArrowConnectionModel;
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.model.HelloModel;
 import wei.learn.gef.model.LineConnectionModel;
+import wei.learn.gef.tree.TreeEditPartFactory;
 
 public class DiagramEditor extends GraphicalEditorWithPalette {
 
@@ -50,6 +67,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 	// an EditDomain is a "session" of editing which contains things like the
 	// CommandStack
 	GraphicalViewer viewer;
+	private ContentsModel contentsModel = null;
 
 	public DiagramEditor() {
 		setEditDomain(new DefaultEditDomain(this));
@@ -98,18 +116,18 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 	@Override
 	protected void initializeGraphicalViewer() {
 		// set the contents of this editor
-		ContentsModel contents = new ContentsModel();
+		contentsModel = new ContentsModel();
 		HelloModel child1 = new HelloModel();
 		child1.setConstraint(new Rectangle(0, 0, -1, -1));
-		contents.addChild(child1);
+		contentsModel.addChild(child1);
 
 		HelloModel child2 = new HelloModel();
 		child2.setConstraint(new Rectangle(30, 30, -1, -1));
-		contents.addChild(child2);
+		contentsModel.addChild(child2);
 		HelloModel child3 = new HelloModel();
 		child3.setConstraint(new Rectangle(10, 80, 80, 50));
-		contents.addChild(child3);
-		viewer.setContents(contents);
+		contentsModel.addChild(child3);
+		viewer.setContents(contentsModel);
 	}
 
 	@Override
@@ -169,24 +187,12 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 				new SimpleFactory(ArrowConnectionModel.class),
 				newArrowConnectionDescriptor, newArrowConnectionDescriptor);
 		ArrowConnectionDrawer.add(arrowConnCreationEntry);
-		//
-		// //汇聚节点
-		// PaletteDrawer mergeLineDrawer = new PaletteDrawer("汇聚节点");
-		// ImageDescriptor mergeLineDescriptor = AbstractUIPlugin
-		// .imageDescriptorFromPlugin(Application.PLUGIN_ID,
-		// IImageKeys.mergeLine);
-		// CreationToolEntry mergeLineCreationEntry = new CreationToolEntry(
-		// "汇聚节点", "汇聚节点",
-		// new SimpleFactory(mergeLineModel.class),
-		// mergeLineDescriptor, mergeLineDescriptor);
-		// mergeLineDrawer.add(mergeLineCreationEntry);
 
 		// 7.0 最后将创建的两组工具加到root上
 		root.add(toolGroup);
 		root.add(drawer);
 		root.add(connectionDrawer);
 		root.add(ArrowConnectionDrawer);
-		// root.add(mergeLineDrawer);
 		return root;
 	}
 
@@ -235,6 +241,9 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		if (type == ZoomManager.class) {
 			return ((ScalableRootEditPart) getGraphicalViewer()
 					.getRootEditPart()).getZoomManager();
+		}// 如果是IContentOutlinePage 类型，则返回该ContentOutlinePage
+		if (type == IContentOutlinePage.class) {
+			return new CustomContentOutlinePage();
 		}
 		return super.getAdapter(type);
 	}
@@ -248,5 +257,95 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 	public void commandStackChanged(EventObject event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 		super.commandStackChanged(event);
+	}
+
+	/****************************** inner class *****************************/
+	class CustomContentOutlinePage extends ContentOutlinePage {
+		// 使用SashForm把Outline视图分为两部分,显示大纲和显示鹰眼
+		private SashForm sash;
+
+		// 实现鹰眼的图形
+		private ScrollableThumbnail thumbnail;
+		private DisposeListener disposeListener;
+
+		public CustomContentOutlinePage() {
+			super(new TreeViewer());
+		}
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public void init(IPageSite pageSite) {
+			super.init(pageSite);
+			// 获得注册给graphical editor的Action
+			ActionRegistry registry = getActionRegistry();
+			// 使这些Action在大纲视图中也有效
+			IActionBars bars = pageSite.getActionBars();
+			String id = IWorkbenchActionConstants.UNDO;
+			bars.setGlobalActionHandler(id, registry.getAction(id));
+			id = IWorkbenchActionConstants.REDO;
+			bars.setGlobalActionHandler(id, registry.getAction(id));
+			id = IWorkbenchActionConstants.DELETE;
+			bars.setGlobalActionHandler(id, registry.getAction(id));
+			bars.updateActionBars();
+		}
+
+		@Override
+		public void createControl(Composite parent) {
+			// 创建SashForm
+			sash = new SashForm(parent, SWT.VERTICAL);
+			// 增加分割线
+			getViewer().createControl(sash);
+			// 设置Edit Domain
+			getViewer().setEditDomain(getEditDomain());
+			// 设置EditPartFactory
+			getViewer().setEditPartFactory(new TreeEditPartFactory());
+			// 本视图中应用于ContentsModel
+			getViewer().setContents(contentsModel);
+			getSelectionSynchronizer().addViewer(getViewer());
+			Canvas canvas = new Canvas(sash, SWT.BORDER);
+			// 使用LightweightSystem 绘制小图形
+			LightweightSystem lws = new LightweightSystem(canvas);
+			// 获得RootEditPart,议会制图形
+			ScalableRootEditPart rootEditPart = (ScalableRootEditPart) getGraphicalViewer()
+					.getRootEditPart();
+			thumbnail = new ScrollableThumbnail(
+					(Viewport) rootEditPart.getFigure());
+			thumbnail.setSource(rootEditPart
+					.getLayer(LayerConstants.PRINTABLE_LAYERS));
+			lws.setContents(thumbnail);
+			disposeListener = new DisposeListener() {
+
+				@Override
+				public void widgetDisposed(DisposeEvent e) {
+					if (thumbnail != null) {
+						thumbnail.deactivate();
+						thumbnail = null;
+					}
+				}
+			};
+			// 当Graphical Viewer 删除时,删除thumbnail图形
+			getGraphicalViewer().getControl().addDisposeListener(
+					disposeListener);
+		}
+
+		@Override
+		public Control getControl() {
+			// TODO Auto-generated method stub
+			return sash;
+		}
+
+		@Override
+		public void dispose() {
+			getSelectionSynchronizer().removeViewer(getViewer());
+
+			Control control = getGraphicalViewer().getControl();
+			if (control != null
+					&& !control.isDisposed())
+			{
+				control.removeDisposeListener(disposeListener);
+				
+			}
+			super.dispose();
+		}
 	}
 }
