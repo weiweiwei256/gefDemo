@@ -11,11 +11,17 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.jface.viewers.TextCellEditor;
 
 import wei.learn.gef.model.HelloModel;
 import wei.learn.gef.policy.CustomComponentEditPolicy;
+import wei.learn.gef.policy.CustomDirectEditPolicy;
 
 public class HelloEditorPart extends EditPartWithListener {
+
+	private CustomDirectEditManager directManager = null;
 
 	@Override
 	protected IFigure createFigure() {
@@ -35,6 +41,8 @@ public class HelloEditorPart extends EditPartWithListener {
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE,
 				new CustomComponentEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
+				new CustomDirectEditPolicy());
 	}
 
 	@Override
@@ -42,8 +50,7 @@ public class HelloEditorPart extends EditPartWithListener {
 		String propertyName = evt.getPropertyName();
 		if (propertyName.equals(HelloModel.P_CONSTRAINT)) {
 			refreshVisuals();
-		}else if(propertyName.equals(HelloModel.P_TEXT))
-		{
+		} else if (propertyName.equals(HelloModel.P_TEXT)) {
 			Label label = (Label) getFigure();
 			label.setText((String) evt.getNewValue());
 		}
@@ -54,5 +61,24 @@ public class HelloEditorPart extends EditPartWithListener {
 		Rectangle constraint = ((HelloModel) getModel()).getConstraint();
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this,
 				getFigure(), constraint);
+	}
+
+	@Override
+	public void performRequest(Request req) {
+		// 如果Request是REQ_DIRECT_EDIT,则执行直接编辑属性的辅助函数performDirectEdit
+		if (req.getType().equals(RequestConstants.REQ_DIRECT_EDIT)) {
+			performDirectEdit();
+			return;
+		}
+	}
+
+	private void performDirectEdit() {
+		if (directManager == null) {
+			// 如果还没有directManager,则创建
+			directManager = new CustomDirectEditManager(this,
+					TextCellEditor.class, new CustomCellEditorLocator(
+							getFigure()));
+		}
+		directManager.show();
 	}
 }
