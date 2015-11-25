@@ -1,6 +1,7 @@
 package wei.learn.gef.ui;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.PositionConstants;
@@ -30,6 +31,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditorWithPalette;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -53,6 +55,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		setEditDomain(new DefaultEditDomain(this));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
@@ -111,8 +114,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-
+		getCommandStack().markSaveLocation();
 	}
 
 	@Override
@@ -228,11 +230,23 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		getSelectionActions().add(action.getId());
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class type) {
 		if (type == ZoomManager.class) {
 			return ((ScalableRootEditPart) getGraphicalViewer()
 					.getRootEditPart()).getZoomManager();
 		}
 		return super.getAdapter(type);
+	}
+
+	@Override
+	public boolean isDirty() {
+		return getCommandStack().isDirty();
+	}
+
+	@Override
+	public void commandStackChanged(EventObject event) {
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+		super.commandStackChanged(event);
 	}
 }
