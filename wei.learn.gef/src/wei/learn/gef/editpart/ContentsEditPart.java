@@ -3,6 +3,8 @@ package wei.learn.gef.editpart;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+import org.eclipse.draw2d.FreeformLayer;
+import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.XYLayout;
@@ -15,25 +17,26 @@ public class ContentsEditPart extends EditPartWithListener {
 
 	@Override
 	protected IFigure createFigure() {
-		Layer figure = new Layer();
-		figure.setLayoutManager(new XYLayout());
-		return figure;
+		FreeformLayer layer = new FreeformLayer();
+		layer.setLayoutManager(new FreeformLayout());
+		return layer;
 	}
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new CustomXYLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE,
+				new CustomXYLayoutEditPolicy());
 	}
+
 	@Override
 	protected List<Object> getModelChildren() {
-		return ((ContentsModel)getModel()).getChildren();
+		return ((ContentsModel) getModel()).getChildren();
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
-		if(propertyName.equals(ContentsModel.P_CHILDREN))
-		{
+		if (propertyName.equals(ContentsModel.P_CHILDREN)) {
 			refreshChildren();
 		}
 	}

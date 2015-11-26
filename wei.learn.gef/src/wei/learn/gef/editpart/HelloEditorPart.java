@@ -1,5 +1,8 @@
 package wei.learn.gef.editpart;
 
+import galaxy.ide.configurable.editor.gef.router.HelloBottomAnchor;
+import galaxy.ide.configurable.editor.gef.router.HelloTopAnchor;
+
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
@@ -99,23 +102,23 @@ public class HelloEditorPart extends EditPartWithListener implements
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(
 			ConnectionEditPart connection) {
-		return new ChopboxAnchor(getFigure());
+		return new HelloBottomAnchor(getFigure());
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(
 			ConnectionEditPart connection) {
-		return new ChopboxAnchor(getFigure());
+		return new HelloTopAnchor(getFigure());
 	}
 
 	@Override
 	public ConnectionAnchor getSourceConnectionAnchor(Request request) {
-		return new ChopboxAnchor(getFigure());
+		return new HelloBottomAnchor(getFigure());
 	}
 
 	@Override
 	public ConnectionAnchor getTargetConnectionAnchor(Request request) {
-		return new ChopboxAnchor(getFigure());
+		return new HelloTopAnchor(getFigure());
 	}
 
 	protected List<Object> getModelSourceConnections() {
