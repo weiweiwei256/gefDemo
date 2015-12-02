@@ -103,14 +103,14 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		List<ANode> closedList = new LinkedList<ANode>();
 		Point startPoint = getStartPoint(connection).getCopy();
 		Point endPoint = getEndPoint(connection).getCopy();
+		preReader.setStartPoint(startPoint);
+		preReader.setEndPoint(endPoint);
 		// 准备AStarCheckedPointList
 		points.removeAllPoints();
 		points.setConn(connection);
 		points.setOnOffMergeLine(on_off_MergeLine);
 		points.setEndPoint(endPoint);
 
-		preReader.setStartPoint(startPoint);
-		preReader.setEndPoint(endPoint);
 
 		connection.translateToRelative(startPoint);
 		connection.translateToRelative(endPoint);
@@ -118,8 +118,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		ANode startNode = new ANode();
 		ANode endNode = new ANode(endPoint, startPoint, D);
 
-		// 标记一下startNode 和 endNode
-		// showStartEndNode(startPoint, startNode, endNode);
+//		 标记一下startNode 和 endNode
+		 showStartEndNode(startPoint, startNode, endNode);
 
 		// 将终点至于图源的外侧
 		if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {
@@ -197,23 +197,23 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		}
 	}
 
-	// private void showStartEndNode(Point startPoint, ANode startNode,
-	// ANode endNode) {
-	// removeOldHandles(layer, SpecialHandler.class);
-	// SpecialHandler sh = new SpecialHandler();
-	// Point p = startNode.getPoint(startPoint, D);
-	// sh.setBounds(new Rectangle(p.x, p.y, 10, 10));
-	// sh.setOwner((GraphicalEditPart) editor.getGraphicalViewer()
-	// .getContents());
-	//
-	// SpecialHandler sh2 = new SpecialHandler();
-	// p = endNode.getPoint(startPoint, D);
-	// sh2.setBounds(new Rectangle(p.x, p.y, 10, 10));
-	// sh2.setOwner((GraphicalEditPart) editor.getGraphicalViewer()
-	// .getContents());
-	// layer.add(sh);
-	// layer.add(sh2);
-	// }
+	private void showStartEndNode(Point startPoint, ANode startNode,
+			ANode endNode) {
+		removeOldHandles(layer, SpecialHandler.class);
+		SpecialHandler sh = new SpecialHandler();
+		Point p = startNode.getPoint(startPoint, D);
+		sh.setBounds(new Rectangle(p.x, p.y, 10, 10));
+		sh.setOwner((GraphicalEditPart) editor.getGraphicalViewer()
+				.getContents());
+
+		SpecialHandler sh2 = new SpecialHandler();
+		p = endNode.getPoint(startPoint, D);
+		sh2.setBounds(new Rectangle(p.x, p.y, 10, 10));
+		sh2.setOwner((GraphicalEditPart) editor.getGraphicalViewer()
+				.getContents());
+		layer.add(sh);
+		layer.add(sh2);
+	}
 
 	private void pathExtraControl(PointList points, Point endPoint) {
 		// 对于终点没有在方格上 出现斜线的处理
@@ -289,10 +289,10 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 
 	private ANode[] findAroundNode(ANode node) {
 		ANode[] nodes = new ANode[((this.style & FOUR_DIR) == FOUR_DIR) ? 4 : 8];
-		nodes[0] = preReader.getNode(node.xIndex, node.yIndex + 1);
-		nodes[1] = preReader.getNode(node.xIndex, node.yIndex - 1);
-		nodes[2] = preReader.getNode(node.xIndex + 1, node.yIndex);
-		nodes[3] = preReader.getNode(node.xIndex - 1, node.yIndex);
+		nodes[0] = preReader.getNode(node.xIndex + 1, node.yIndex);
+		nodes[1] = preReader.getNode(node.xIndex - 1, node.yIndex);
+		nodes[2] = preReader.getNode(node.xIndex, node.yIndex + 1);
+		nodes[3] = preReader.getNode(node.xIndex, node.yIndex - 1);
 
 		if ((this.style & FOUR_DIR) != FOUR_DIR) {
 			nodes[4] = preReader.getNode(node.xIndex - 1, node.yIndex + 1);
