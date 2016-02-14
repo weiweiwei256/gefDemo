@@ -31,8 +31,10 @@ import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
+import org.eclipse.gef.ui.palette.PaletteViewerProvider;
+import org.eclipse.gef.ui.palette.customize.EntryPage;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
-import org.eclipse.gef.ui.parts.GraphicalEditorWithPalette;
+import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -58,9 +60,10 @@ import wei.learn.gef.model.ArrowConnectionModel;
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.model.HelloModel;
 import wei.learn.gef.model.LineConnectionModel;
+import wei.learn.gef.palette.CustomPaletteViewerProvider;
 import wei.learn.gef.tree.TreeEditPartFactory;
 
-public class DiagramEditor extends GraphicalEditorWithPalette {
+public class DiagramEditor extends GraphicalEditorWithFlyoutPalette {
 
 	// Editor ID
 	public static final String ID = "wei.learn.gef.DiagramEditor";
@@ -141,7 +144,6 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		PaletteRoot root = new PaletteRoot();
 		// 2.0 创建一个工具组用于防止常规Tools
 		PaletteGroup toolGroup = new PaletteGroup("工具");
-
 		// 3.0 创建一个GEF提供的"selection"工具 并将其放到toolGroup中
 		ToolEntry tool = new SelectionToolEntry();
 		toolGroup.add(tool);
@@ -154,8 +156,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		toolGroup.add(tool);
 
 		// 5.0 创建一个Drawer(抽屉)放置绘图工具,该抽屉名称为"画图"
-		PaletteDrawer drawer = new PaletteDrawer("画图");
-
+		PaletteDrawer drawer = new PaletteDrawer("画图wei");
 		// 指定"创建HelloModel模型"工具所对应的图标
 		ImageDescriptor descriptor = AbstractUIPlugin
 				.imageDescriptorFromPlugin(Application.PLUGIN_ID,
@@ -196,7 +197,11 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		return root;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
+	protected PaletteViewerProvider createPaletteViewerProvider() {
+		return new CustomPaletteViewerProvider(getEditDomain());
+	}
+
 	@Override
 	protected void createActions() {
 		super.createActions();
@@ -339,11 +344,8 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 			getSelectionSynchronizer().removeViewer(getViewer());
 
 			Control control = getGraphicalViewer().getControl();
-			if (control != null
-					&& !control.isDisposed())
-			{
+			if (control != null && !control.isDisposed()) {
 				control.removeDisposeListener(disposeListener);
-				
 			}
 			super.dispose();
 		}
