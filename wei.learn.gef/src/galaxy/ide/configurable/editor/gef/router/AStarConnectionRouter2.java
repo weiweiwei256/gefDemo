@@ -119,7 +119,7 @@ public class AStarConnectionRouter2 extends AbstractRouter implements RouterStyl
 		ANode endNode = new ANode(endPoint, startPoint, D);
 
 //		 标记一下startNode 和 endNode
-		 showStartEndNode(startPoint, startNode, endNode);
+//		 showStartEndNode(startPoint, startNode, endNode);
 
 		// 将终点至于图源的外侧
 		if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {

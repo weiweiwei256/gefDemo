@@ -6,7 +6,6 @@ import galaxy.ide.configurable.editor.gef.router.HelloTopAnchor;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
-import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.ConnectionAnchor;
@@ -23,6 +22,8 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.viewers.TextCellEditor;
 
+import wei.learn.gef.handle.HelloHandle;
+import wei.learn.gef.locator.HelloLocator;
 import wei.learn.gef.model.HelloModel;
 import wei.learn.gef.policy.CustomComponentEditPolicy;
 import wei.learn.gef.policy.CustomDirectEditPolicy;
@@ -44,6 +45,10 @@ public class HelloEditorPart extends EditPartWithListener implements
 				new MarginBorder(3)));
 		label.setBackgroundColor(ColorConstants.orange);
 		label.setOpaque(true);
+		HelloHandle helloHandle = new HelloHandle(this,1);
+		label.add(helloHandle);
+		helloHandle.setLocator(new HelloLocator());
+		
 		return label;
 	}
 
