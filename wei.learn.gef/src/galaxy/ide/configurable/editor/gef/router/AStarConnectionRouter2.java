@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.draw2d.AbstractRouter;
 import org.eclipse.draw2d.Connection;
@@ -21,6 +22,8 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.ui.IEditorPart;
 
+import wei.learn.gef.figure.CustomPolylineConnection;
+import wei.learn.gef.helper.Utility;
 import wei.learn.gef.ui.DiagramEditor;
 
 /**
@@ -58,70 +61,124 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 	 * @param style
 	 *            参考{@link RouterStyle} : FLOYD,FLOYD_FLAT,FOUR_DIR,SHOWPOOL
 	 */
-	public AStarConnectionRouter2(IEditorPart editor, int gridLength, int style) {
-		this.editor = (DiagramEditor) editor;
-		D = gridLength;
-		this.style = style;
-		manager = (LayerManager) this.editor.getGraphicalViewer()
+	public AStarConnectionRouter2(DiagramEditor diaEditor, int gridLength,
+			int style) {
+		this.editor = diaEditor;
+		manager = (LayerManager) editor.getGraphicalViewer()
 				.getEditPartRegistry().get(LayerManager.ID);
 		layer = (FreeformLayer) manager
 				.getLayer(org.eclipse.gef.LayerConstants.HANDLE_LAYER);
-	}
-
-	private void search(ANode node, List<ANode> openList,
-			List<ANode> closedList, ANode startNode, ANode endNode) {
-		ANode[] nodes = findAroundNode(node);
-		for (int i = 0, len = nodes.length; i < len; i++) {
-			if (nodes[i].getLevel() == ANodeLevel.DEAD)
-				continue;
-			nodes[i].g = (i <= 3 ? nodes[i].getLevel().RE
-					: nodes[i].getLevel().BE) + node.g;
-			nodes[i].h = caculateH(nodes[i], endNode);
-			if (closedList.contains(nodes[i]))
-				continue;
-			if (!openList.contains(nodes[i])) {
-				openList.add(nodes[i]);
-				nodes[i].setParent(node);
-			}
-			// else if (openList.contains(nodes[i]))
-			else {
-				int idx = openList.indexOf(nodes[i]);
-				ANode n = openList.get(idx);
-				if (nodes[i].g < n.g) {
-					openList.remove(idx);
-					closedList.add(n);
-					nodes[i].setParent(n.getParent());
-					openList.add(idx, nodes[i]);
-				}
-			}
-		}
-	}
-
-	private int caculateH(ANode p, ANode endNode) {
-		return (Math.abs(endNode.xIndex - p.xIndex) + Math.abs(endNode.yIndex
-				- p.yIndex))
-				* p.getLevel().RE;
+		D = gridLength;
+		this.style = style;
 	}
 
 	@Override
 	public void route(Connection connection) {
+		CustomPolylineConnection conn = (CustomPolylineConnection) connection;
+		// bendpoint修改部分
+		List<?> bendpoints = (List<?>) getConstraint(conn);
+		if (bendpoints != null && !bendpoints.isEmpty()) // 如果存在bendpoints修改
+															// 则停止自动布线
+															// 改为在当前线的基础上修改
+		{
+			Point mousePoint = (Point) bendpoints.get(0);
+			PointList points = conn.getPoints(); // 原有布线结果
+			if (points.size() > 2) // 存在可拖动部分
+			{
+				Map<Integer, Point> changePoints = new HashMap<Integer, Point>();
+				// 检测想要移动的方向
+				for (int i = 1; i < points.size() - 2; i++) {
+					Point forwardPoint = points.getPoint(i);
+					Point nextPoint = points.getPoint(i + 1);
+					if (forwardPoint.x == nextPoint.x) // 检测是否是水平拖动
+					{
+					}
+					if (forwardPoint.y == nextPoint.y)// 检测是否是竖直拖动
+					{
+						// 检测鼠标拖动位置在 连线附近
+						if ((forwardPoint.x - mousePoint.x)
+								* (nextPoint.x - mousePoint.x) < 0
+								&& Math.abs(forwardPoint.y - mousePoint.y) < 10
+								&& forwardPoint.y != mousePoint.y) {
+							// 命中 修改两端连线
+							changePoints.put(i, new Point(forwardPoint.x,
+									mousePoint.y));
+							changePoints.put(i + 1, new Point(nextPoint.x,
+									mousePoint.y));
+						}
+					}
+				}
+				// 修改线
+				if (!changePoints.isEmpty()) {
+					for (Entry<Integer, Point> entry : changePoints.entrySet()) {
+						points.setPoint(entry.getValue(), entry.getKey());
+					}
+				}
+				// bendpoints.remove(0);
+
+			}
+			return;
+		}
+		// 如果已经设置好了路径 则无需重新布线
+		if (conn.isManual()) {
+			// 自动匹配开始位置和终止位置 并添加到手动布线中
+			Point startPoint = getStartPoint(conn).getCopy();
+			Point endPoint = getEndPoint(conn).getCopy();
+			PointList middlePoints = conn.getPoints().getCopy();
+
+			// 如果起终点发生修改 则进行类似Manhattan的布线.
+			if (conn.getOriginStartPoint() == null
+					&& conn.getOriginStartPoint() == null) {
+				//创建连线时,do nothing 根据保存信息创建就好  
+			}
+			else if (!startPoint.equals(conn.getOriginStartPoint())) // 起点Manhattan
+			{
+				// 移除临近点 终点前的一个点,由于移动终点,所以会发生改变. 这里直接删除 然后添加新的
+				middlePoints.removePoint(0);
+				// 基础点 这个点在改变终点时不应该发生变化,通过和新终点的相对位置计算新路径
+				Point basicPoint = middlePoints.getFirstPoint();
+				PointList calPath = calculateNewStartManhattanPath(basicPoint,
+						startPoint);
+				middlePoints.addAll(calPath);
+
+			} else if (!endPoint.equals(conn.getOriginEndPoint())) // 终点Manhattan
+			{
+				// 移除临近点 终点前的一个点,由于移动终点,所以会发生改变. 这里直接删除 然后添加新的
+				middlePoints.removePoint(middlePoints.size() - 1);
+				// 基础点 这个点在改变终点时不应该发生变化,通过和新终点的相对位置计算新路径
+				Point basicPoint = middlePoints.getLastPoint();
+				PointList calPath = calculateNewEndManhattanPath(basicPoint,
+						endPoint);
+				middlePoints.addAll(calPath);
+			}
+			middlePoints.insertPoint(startPoint, 0);
+			middlePoints.addPoint(endPoint);
+			conn.setPoints(middlePoints);
+
+			// 更新原始起终点数据
+			conn.setOriginStartPoint(startPoint);
+			conn.setOriginEndPoint(endPoint);
+			return;
+		}
+		// AStar自动布线部分
 		long time = System.currentTimeMillis();
 		// 准备AStar集合
 		List<ANode> openList = new LinkedList<ANode>();
 		List<ANode> closedList = new LinkedList<ANode>();
-		Point startPoint = getStartPoint(connection).getCopy();
-		Point endPoint = getEndPoint(connection).getCopy();
+		Point startPoint = getStartPoint(conn).getCopy();
+		Point endPoint = getEndPoint(conn).getCopy();
+
 		// 准备AStarCheckedPointList
 		points.removeAllPoints();
-		points.setConn(connection);
+		points.setConn(conn);
 		points.setOnOffMergeLine(on_off_MergeLine);
 		points.setEndPoint(endPoint);
 
 		preReader.setStartPoint(startPoint);
 		preReader.setEndPoint(endPoint);
 
-		connection.translateToRelative(startPoint);
-		connection.translateToRelative(endPoint);
+		conn.translateToRelative(startPoint);
+		conn.translateToRelative(endPoint);
 
 		ANode startNode = new ANode();
 		ANode endNode = new ANode(endPoint, startPoint, D);
@@ -200,8 +257,7 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 			points.addCandidatePoint(aPathList.getPoint(j));
 		}
 		points.addCandidatePoint(endPoint);
-		points.addShoulder();
-		connection.setPoints(points.getCopy());
+		conn.setPoints(points.getCopy());
 
 		points.removeAllPoints();
 		openList.clear();
@@ -210,6 +266,77 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 		if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {
 			System.out.println("耗时： " + (System.currentTimeMillis() - time));
 		}
+
+		// 更新原始起终点数据
+		conn.setOriginStartPoint(startPoint);
+		conn.setOriginEndPoint(endPoint);
+	}
+
+	private PointList calculateNewStartManhattanPath(Point basicPoint,
+			Point startPoint) {
+		PointList points = new PointList();
+		if (basicPoint.y > startPoint.y) { // 顺势向上
+			points.addPoint(startPoint.x, basicPoint.y); // 直接添加终点上方的点即可
+		} else if (basicPoint.y < startPoint.y) // 逆向上移
+		{
+			// 类似Z型的折线 以均值为折点
+			int middleX = startPoint.x + (basicPoint.x - startPoint.x) / 2;
+			points.addPoint(startPoint.x, startPoint.y + D);
+			points.addPoint(middleX, startPoint.y + D);
+			points.addPoint(middleX, basicPoint.y);
+		}
+		return points;
+	}
+
+	private PointList calculateNewEndManhattanPath(Point basicPoint,
+			Point endPoint) {
+		PointList points = new PointList();
+		if (basicPoint.y < endPoint.y) { // 顺势向下
+			points.addPoint(endPoint.x, basicPoint.y); // 直接添加终点上方的点即可
+		} else if (basicPoint.y > endPoint.y) // 逆向上移
+		{
+			// 类似Z型的折线 以均值为折点
+			int middleX = basicPoint.x + (endPoint.x - basicPoint.x) / 2;
+			points.addPoint(middleX, basicPoint.y);
+			points.addPoint(middleX, endPoint.y - D);
+			points.addPoint(endPoint.x, endPoint.y - D);
+		}
+		return points;
+	}
+
+	private void search(ANode node, List<ANode> openList,
+			List<ANode> closedList, ANode startNode, ANode endNode) {
+		ANode[] nodes = findAroundNode(node);
+		for (int i = 0, len = nodes.length; i < len; i++) {
+			if (nodes[i].getLevel() == ANodeLevel.DEAD)
+				continue;
+			nodes[i].g = (i <= 3 ? nodes[i].getLevel().RE
+					: nodes[i].getLevel().BE) + node.g;
+			nodes[i].h = caculateH(nodes[i], endNode);
+			if (closedList.contains(nodes[i]))
+				continue;
+			if (!openList.contains(nodes[i])) {
+				openList.add(nodes[i]);
+				nodes[i].setParent(node);
+			}
+			// else if (openList.contains(nodes[i]))
+			else {
+				int idx = openList.indexOf(nodes[i]);
+				ANode n = openList.get(idx);
+				if (nodes[i].g < n.g) {
+					openList.remove(idx);
+					closedList.add(n);
+					nodes[i].setParent(n.getParent());
+					openList.add(idx, nodes[i]);
+				}
+			}
+		}
+	}
+
+	private int caculateH(ANode p, ANode endNode) {
+		return (Math.abs(endNode.xIndex - p.xIndex) + Math.abs(endNode.yIndex
+				- p.yIndex))
+				* p.getLevel().RE;
 	}
 
 	// private void showStartEndNode(Point startPoint, ANode startNode,
@@ -515,7 +642,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 	}
 
 	// 重写bendpointCOnnnectionRouter的方法
-	private Map<Connection, Object> constraints = new HashMap<Connection, Object>(11);
+	private Map<Connection, Object> constraints = new HashMap<Connection, Object>(
+			11);
 
 	/**
 	 * Gets the constraint for the given {@link Connection}.

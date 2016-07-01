@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 
 public class AbstractConnectionModel extends AbstractModel {
 	private HelloModel source, target;
 	// bending点的位置
-	private List<Point> bendpoints = new ArrayList<Point>();
+	private PointList bendpoints = new PointList();
 	// bending点位置改变的ID
 	public static final String P_BEND_POINT = "_bend_point";
+
+	private boolean isManual = false;
 
 	public void attachSource() {
 		if (!source.getModelSourceConnection().contains(this)) {
@@ -49,21 +52,34 @@ public class AbstractConnectionModel extends AbstractModel {
 	}
 
 	public void addBendpoint(int index, Point point) {
-		bendpoints.add(index, point);
+		bendpoints.setPoint(point, index);
 		firePropertyChange(P_BEND_POINT, null, null);
 	}
 
 	public void removeBendpoint(int index) {
-		bendpoints.remove(index);
+		bendpoints.removePoint(index);
 		firePropertyChange(P_BEND_POINT, null, null);
 	}
 
 	public void replaceBendpoint(int index, Point point) {
-		bendpoints.set(index, point);
+		bendpoints.setPoint(point, index);
 		firePropertyChange(P_BEND_POINT, null, null);
 	}
 
-	public List<Point> getBendpoints() {
+	public boolean isManual() {
+		return isManual;
+	}
+
+	public void setManual(boolean isManual) {
+		this.isManual = isManual;
+	}
+
+	public void setBendpoints(PointList bendpoints) {
+		this.bendpoints = bendpoints;
+		firePropertyChange(P_BEND_POINT, null, null);
+	}
+
+	public PointList getBendpoints() {
 		return bendpoints;
 	}
 }

@@ -14,7 +14,7 @@ public class DeleteBendpointCommand extends Command
     @Override
     public void execute()
     {
-        oldLocation = conn.getBendpoints().get(index);
+        oldLocation = conn.getBendpoints().getPoint(index);
         conn.removeBendpoint(index);
     }
 

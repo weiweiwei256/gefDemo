@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.AbsoluteBendpoint;
-import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 
-import wei.learn.gef.helper.Utility;
+import wei.learn.gef.figure.CustomPolylineConnection;
 import wei.learn.gef.model.AbstractConnectionModel;
 import wei.learn.gef.policy.CustomBendpointEditPolicy;
 import wei.learn.gef.policy.CustomConnectionEditPolicy;
@@ -24,8 +23,13 @@ public class CustomAbstractConnectionEditPart extends
 
 	@Override
 	protected IFigure createFigure() {
-		PolylineConnection conn = new PolylineConnection();
-		conn.setConnectionRouter(new BendpointConnectionRouter());
+		CustomPolylineConnection conn = new CustomPolylineConnection();
+
+		AbstractConnectionModel lineModel = (AbstractConnectionModel) getModel();
+		conn.setManual(lineModel.isManual());
+		if (conn.isManual()) {
+			conn.setPoints(lineModel.getBendpoints());
+		}
 		return conn;
 	}
 
@@ -35,7 +39,8 @@ public class CustomAbstractConnectionEditPart extends
 				new CustomConnectionEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE,
 				new CustomConnectionEndpointEditPolicy());
-		installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE, new CustomBendpointEditPolicy());
+		installEditPolicy(EditPolicy.CONNECTION_BENDPOINTS_ROLE,
+				new CustomBendpointEditPolicy());
 
 	}
 
@@ -60,21 +65,17 @@ public class CustomAbstractConnectionEditPart extends
 
 	protected void refreshBendpoints() {
 		// 首先获得bending 点的位置
-		List<Point> bendpoints = ((AbstractConnectionModel) getModel())
+		PointList bendpoints = ((AbstractConnectionModel) getModel())
 				.getBendpoints();
 		// 控制点的列表
 		List<Point> constraint = new ArrayList<Point>();
 		for (int i = 0; i < bendpoints.size(); i++) {
 			// 根本连接模型的数据创建一个控制点
-			constraint.add(new AbsoluteBendpoint((Point) bendpoints.get(i)));
+			constraint
+					.add(new AbsoluteBendpoint((Point) bendpoints.getPoint(i)));
 		}
 		// 创建一个连接，把刚才生成的控制点作为约束
 		getConnectionFigure().setRoutingConstraint(constraint);
-	}
-
-	// 重载
-	protected void refreshVisuals() {
-		refreshBendpoints();
 	}
 
 }

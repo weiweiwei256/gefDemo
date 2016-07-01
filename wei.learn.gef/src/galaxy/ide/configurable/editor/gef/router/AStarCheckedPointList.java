@@ -25,7 +25,7 @@ public class AStarCheckedPointList extends PointList {
 
 	/****** shoulder *******************************************************/
 	// 肩膀开关
-	private boolean shoulder_on_off = true;
+	private boolean shoulder_on_off = false;
 	// shoulder x偏移量
 	private int SHOULDER_OFFSET_X = 3;
 	// shoulder y偏移量

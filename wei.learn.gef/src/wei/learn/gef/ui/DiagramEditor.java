@@ -1,11 +1,19 @@
 package wei.learn.gef.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.ConnectionLayer;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
+import org.eclipse.gef.LayerConstants;
+import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.palette.ConnectionCreationToolEntry;
 import org.eclipse.gef.palette.CreationToolEntry;
@@ -29,6 +37,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import wei.learn.gef.Application;
 import wei.learn.gef.editpart.PartFactory;
 import wei.learn.gef.helper.IImageKeys;
+import wei.learn.gef.helper.Utility;
 import wei.learn.gef.model.ArrowConnectionModel;
 import wei.learn.gef.model.ContentsModel;
 import wei.learn.gef.model.HelloModel;
@@ -71,15 +80,43 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		ContentsModel contents = new ContentsModel();
 		HelloModel child1 = new HelloModel();
 		child1.setConstraint(new Rectangle(0, 0, -1, -1));
+		child1.setText("child1");
 		contents.addChild(child1);
-
 		HelloModel child2 = new HelloModel();
-		child2.setConstraint(new Rectangle(30, 30, -1, -1));
+		child2.setConstraint(new Rectangle(100, 160, -1, -1));
+		child2.setText("child2");
 		contents.addChild(child2);
 		HelloModel child3 = new HelloModel();
-		child3.setConstraint(new Rectangle(10, 80, 80, 50));
+		child3.setConstraint(new Rectangle(400, 400, 80, 50));
+		child3.setText("child3");
 		contents.addChild(child3);
+		// 106, 378, 439, 378
+		// 创建连线
+		// 创建自动布线连线
+//		LineConnectionModel line1 = new LineConnectionModel();
+//		line1.setManual(false);
+//		line1.setSource(child1);
+//		line1.setTarget(child2);
+//		line1.attachSource();
+//		line1.attachTarget();
+		// 创建手动布线的连线
+		LineConnectionModel line2 = new LineConnectionModel();
+		PointList points2 = new PointList();
+		points2.addPoint(125, 290);
+		points2.addPoint(439, 290);
+		line2.setBendpoints(points2);
+		line2.setManual(true);
+		line2.setSource(child2);
+		line2.setTarget(child3);
+		line2.attachSource();
+		line2.attachTarget();
 		viewer.setContents(contents);
+
+		// Connection层布线策略
+		ConnectionLayer connLayer = (ConnectionLayer) LayerManager.Helper.find(
+				getGraphicalViewer().getContents()).getLayer(
+				LayerConstants.CONNECTION_LAYER);
+		connLayer.setConnectionRouter(Utility.getRouter(this));
 	}
 
 	@Override
