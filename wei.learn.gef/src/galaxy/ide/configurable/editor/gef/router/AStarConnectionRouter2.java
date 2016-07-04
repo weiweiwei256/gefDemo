@@ -129,10 +129,11 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 			// 如果起终点发生修改 则进行类似Manhattan的布线.
 			if (conn.getOriginStartPoint() == null
 					&& conn.getOriginStartPoint() == null) {
-				//创建连线时,do nothing 根据保存信息创建就好  
-			}
-			else if (!startPoint.equals(conn.getOriginStartPoint())) // 起点Manhattan
+				// 创建连线时,do nothing 根据保存信息创建就好
+			} else if (!startPoint.equals(conn.getOriginStartPoint())) // 起点Manhattan
 			{
+				// 移除起点
+				middlePoints.removePoint(0);
 				// 移除临近点 终点前的一个点,由于移动终点,所以会发生改变. 这里直接删除 然后添加新的
 				middlePoints.removePoint(0);
 				// 基础点 这个点在改变终点时不应该发生变化,通过和新终点的相对位置计算新路径
@@ -143,6 +144,8 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 
 			} else if (!endPoint.equals(conn.getOriginEndPoint())) // 终点Manhattan
 			{
+				// 移除终点
+				middlePoints.removePoint(middlePoints.size() - 1);
 				// 移除临近点 终点前的一个点,由于移动终点,所以会发生改变. 这里直接删除 然后添加新的
 				middlePoints.removePoint(middlePoints.size() - 1);
 				// 基础点 这个点在改变终点时不应该发生变化,通过和新终点的相对位置计算新路径
@@ -151,8 +154,12 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 						endPoint);
 				middlePoints.addAll(calPath);
 			}
-			middlePoints.insertPoint(startPoint, 0);
-			middlePoints.addPoint(endPoint);
+			if (!middlePoints.getFirstPoint().equals(startPoint)) {
+				middlePoints.insertPoint(startPoint, 0);
+			}
+			if (!middlePoints.getLastPoint().equals(endPoint)) {
+				middlePoints.addPoint(endPoint);
+			}
 			conn.setPoints(middlePoints);
 
 			// 更新原始起终点数据
