@@ -73,100 +73,7 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 	}
 
 	@Override
-	public void route(Connection connection) {
-		CustomPolylineConnection conn = (CustomPolylineConnection) connection;
-		// bendpoint修改部分
-		List<?> bendpoints = (List<?>) getConstraint(conn);
-		if (bendpoints != null && !bendpoints.isEmpty()) // 如果存在bendpoints修改
-															// 则停止自动布线
-															// 改为在当前线的基础上修改
-		{
-			Point mousePoint = (Point) bendpoints.get(0);
-			PointList points = conn.getPoints(); // 原有布线结果
-			if (points.size() > 2) // 存在可拖动部分
-			{
-				Map<Integer, Point> changePoints = new HashMap<Integer, Point>();
-				// 检测想要移动的方向
-				for (int i = 1; i < points.size() - 2; i++) {
-					Point forwardPoint = points.getPoint(i);
-					Point nextPoint = points.getPoint(i + 1);
-					if (forwardPoint.x == nextPoint.x) // 检测是否是水平拖动
-					{
-					}
-					if (forwardPoint.y == nextPoint.y)// 检测是否是竖直拖动
-					{
-						// 检测鼠标拖动位置在 连线附近
-						if ((forwardPoint.x - mousePoint.x)
-								* (nextPoint.x - mousePoint.x) < 0
-								&& Math.abs(forwardPoint.y - mousePoint.y) < 10
-								&& forwardPoint.y != mousePoint.y) {
-							// 命中 修改两端连线
-							changePoints.put(i, new Point(forwardPoint.x,
-									mousePoint.y));
-							changePoints.put(i + 1, new Point(nextPoint.x,
-									mousePoint.y));
-						}
-					}
-				}
-				// 修改线
-				if (!changePoints.isEmpty()) {
-					for (Entry<Integer, Point> entry : changePoints.entrySet()) {
-						points.setPoint(entry.getValue(), entry.getKey());
-					}
-				}
-				// bendpoints.remove(0);
-
-			}
-			return;
-		}
-		// 如果已经设置好了路径 则无需重新布线
-		if (conn.isManual()) {
-			// 自动匹配开始位置和终止位置 并添加到手动布线中
-			Point startPoint = getStartPoint(conn).getCopy();
-			Point endPoint = getEndPoint(conn).getCopy();
-			PointList middlePoints = conn.getPoints().getCopy();
-
-			// 如果起终点发生修改 则进行类似Manhattan的布线.
-			if (conn.getOriginStartPoint() == null
-					&& conn.getOriginStartPoint() == null) {
-				// 创建连线时,do nothing 根据保存信息创建就好
-			} else if (!startPoint.equals(conn.getOriginStartPoint())) // 起点Manhattan
-			{
-				// 移除起点
-				middlePoints.removePoint(0);
-				// 移除临近点 终点前的一个点,由于移动终点,所以会发生改变. 这里直接删除 然后添加新的
-				middlePoints.removePoint(0);
-				// 基础点 这个点在改变终点时不应该发生变化,通过和新终点的相对位置计算新路径
-				Point basicPoint = middlePoints.getFirstPoint();
-				PointList calPath = calculateNewStartManhattanPath(basicPoint,
-						startPoint);
-				middlePoints.addAll(calPath);
-
-			} else if (!endPoint.equals(conn.getOriginEndPoint())) // 终点Manhattan
-			{
-				// 移除终点
-				middlePoints.removePoint(middlePoints.size() - 1);
-				// 移除临近点 终点前的一个点,由于移动终点,所以会发生改变. 这里直接删除 然后添加新的
-				middlePoints.removePoint(middlePoints.size() - 1);
-				// 基础点 这个点在改变终点时不应该发生变化,通过和新终点的相对位置计算新路径
-				Point basicPoint = middlePoints.getLastPoint();
-				PointList calPath = calculateNewEndManhattanPath(basicPoint,
-						endPoint);
-				middlePoints.addAll(calPath);
-			}
-			if (!middlePoints.getFirstPoint().equals(startPoint)) {
-				middlePoints.insertPoint(startPoint, 0);
-			}
-			if (!middlePoints.getLastPoint().equals(endPoint)) {
-				middlePoints.addPoint(endPoint);
-			}
-			conn.setPoints(middlePoints);
-
-			// 更新原始起终点数据
-			conn.setOriginStartPoint(startPoint);
-			conn.setOriginEndPoint(endPoint);
-			return;
-		}
+	public void route(Connection conn) {
 		// AStar自动布线部分
 		long time = System.currentTimeMillis();
 		// 准备AStar集合
@@ -273,10 +180,6 @@ public class AStarConnectionRouter2 extends AbstractRouter implements
 		if ((this.style & CONSOLE_INFO) == CONSOLE_INFO) {
 			System.out.println("耗时： " + (System.currentTimeMillis() - time));
 		}
-
-		// 更新原始起终点数据
-		conn.setOriginStartPoint(startPoint);
-		conn.setOriginEndPoint(endPoint);
 	}
 
 	private PointList calculateNewStartManhattanPath(Point basicPoint,

@@ -93,23 +93,14 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		// 106, 378, 439, 378
 		// 创建连线
 		// 创建自动布线连线
-		LineConnectionModel line1 = new LineConnectionModel();
-		line1.setManual(false);
-		line1.setSource(child1);
-		line1.setTarget(child2);
-		line1.attachSource();
-		line1.attachTarget();
-//		// 创建手动布线的连线
-//		LineConnectionModel line2 = new LineConnectionModel();
-//		PointList points2 = new PointList();
-//		points2.addPoint(125, 290);
-//		points2.addPoint(439, 290);
-//		line2.setBendpoints(points2);
-//		line2.setManual(true);
-//		line2.setSource(child2);
-//		line2.setTarget(child3);
-//		line2.attachSource();
-//		line2.attachTarget();
+		// LineConnectionModel line1 = new LineConnectionModel();
+		// line1.setManual(false);
+		// line1.setSource(child1);
+		// line1.setTarget(child2);
+		// line1.attachSource();
+		// line1.attachTarget();
+		// 创建手动布线的连线
+
 		viewer.setContents(contents);
 
 		// Connection层布线策略
@@ -117,6 +108,17 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 				getGraphicalViewer().getContents()).getLayer(
 				LayerConstants.CONNECTION_LAYER);
 		connLayer.setConnectionRouter(Utility.getRouter(this));
+		LineConnectionModel line2 = new LineConnectionModel();
+		List<Point> points2 = new ArrayList<Point>();
+		points2.add(new Point(125, 200));
+		points2.add(new Point(239, 200));
+		points2.add(new Point(239,290));
+		points2.add(new Point(439,290));
+		line2.setBendpoints(points2);
+		line2.setSource(child2);
+		line2.setTarget(child3);
+		line2.attachSource();
+		line2.attachTarget();
 	}
 
 	@Override

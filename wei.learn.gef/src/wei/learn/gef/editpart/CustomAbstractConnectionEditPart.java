@@ -24,12 +24,6 @@ public class CustomAbstractConnectionEditPart extends
 	@Override
 	protected IFigure createFigure() {
 		CustomPolylineConnection conn = new CustomPolylineConnection();
-
-		AbstractConnectionModel lineModel = (AbstractConnectionModel) getModel();
-		conn.setManual(lineModel.isManual());
-		if (conn.isManual()) {
-			conn.setPoints(lineModel.getBendpoints());
-		}
 		return conn;
 	}
 
@@ -65,17 +59,21 @@ public class CustomAbstractConnectionEditPart extends
 
 	protected void refreshBendpoints() {
 		// 首先获得bending 点的位置
-		PointList bendpoints = ((AbstractConnectionModel) getModel())
+		List<Point> bendpoints = ((AbstractConnectionModel) getModel())
 				.getBendpoints();
 		// 控制点的列表
 		List<Point> constraint = new ArrayList<Point>();
 		for (int i = 0; i < bendpoints.size(); i++) {
 			// 根本连接模型的数据创建一个控制点
 			constraint
-					.add(new AbsoluteBendpoint((Point) bendpoints.getPoint(i)));
+					.add(new AbsoluteBendpoint((Point) bendpoints.get(i)));
 		}
 		// 创建一个连接，把刚才生成的控制点作为约束
 		getConnectionFigure().setRoutingConstraint(constraint);
 	}
-
+	@Override
+	protected void refreshVisuals() {
+		refreshBendpoints();
+		super.refreshVisuals();
+	}
 }

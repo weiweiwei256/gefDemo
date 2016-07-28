@@ -7,16 +7,17 @@ import org.eclipse.draw2d.geometry.PointList;
 
 public class CustomPolylineConnection extends PolylineConnection {
 	private static final int OFFSET = 2;
-	private boolean isManual = false;
 	private Point originStartPoint;
 	private Point originEndPoint;
 
 	@Override
 	protected void outlineShape(Graphics g) {
 		PointList points = getPoints();
-		PointList shoulderPoints = new PointList();
-		if (points.size() > 2)// 存在拐点的情况
+		if (points.size() <= 2) {
+			super.outlineShape(g);
+		} else if (points.size() > 2)// 存在拐点的情况
 		{
+			PointList shoulderPoints = new PointList();
 			shoulderPoints.addPoint(points.getFirstPoint());
 			for (int i = 1; i < points.size() - 1; i++)// 遍历除两端的点,添加肩膀
 			{
@@ -52,8 +53,8 @@ public class CustomPolylineConnection extends PolylineConnection {
 								anglePoint.y);
 					} else if (forwardPoint.x > anglePoint.x) // 向左
 					{
-						shoulderPoints.addPoint(anglePoint.x+ OFFSET, anglePoint.y
-								);
+						shoulderPoints.addPoint(anglePoint.x + OFFSET,
+								anglePoint.y);
 					}
 
 					// anglePoint 和 nextPoint是竖直线
@@ -67,16 +68,8 @@ public class CustomPolylineConnection extends PolylineConnection {
 				}
 			}
 			shoulderPoints.addPoint(points.getLastPoint());
+			g.drawPolyline(shoulderPoints);
 		}
-		g.drawPolyline(shoulderPoints);
-	}
-
-	public void setManual(boolean isManual) {
-		this.isManual = isManual;
-	}
-
-	public boolean isManual() {
-		return isManual;
 	}
 
 	public Point getOriginStartPoint() {

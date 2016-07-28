@@ -54,7 +54,7 @@ public class MyBendpointConnectionRouter extends AbstractRouter {
 		points.removeAllPoints();
 
 		List bendpoints = (List) getConstraint(conn);
-		System.err.println(bendpoints);
+//		System.err.println(bendpoints);
 		if (bendpoints == null)
 			bendpoints = Collections.EMPTY_LIST;
 

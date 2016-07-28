@@ -1,37 +1,37 @@
 package wei.learn.gef.helper;
 
-import galaxy.ide.configurable.editor.gef.router.AStarConnectionRouter2;
-
-import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ConnectionRouter;
-import org.eclipse.draw2d.ManhattanConnectionRouter;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
+import wei.learn.gef.router.MyBendpointConnectionRouter;
 import wei.learn.gef.ui.DiagramEditor;
 
-public class Utility
-{
-    private static ConnectionRouter router = null;
+public class Utility {
+	private static ConnectionRouter router = null;
 
-    public static ConnectionRouter getRouter(DiagramEditor editor)
-    {
-//        router = new AStarConnectionRouter2(editor, 20,
-//                AStarConnectionRouter2.FLOYD_SIMPLIFY
-////                |AStarConnectionRouter2.FLOYD
-////                        | AStarConnectionRouter2.TEST
-////                        | AStarConnectionRouter2.SHOWPOOL
-//                        | AStarConnectionRouter2.FOUR_DIR);
-//        return router;
-//    	return new ManhattanConnectionRouter();
-    	return new BendpointConnectionRouter();
-    }
+	public static ConnectionRouter getRouter(DiagramEditor editor) {
+		// router = new AStarConnectionRouter2(editor, 20,
+		// AStarConnectionRouter2.FLOYD_SIMPLIFY
+		// // |AStarConnectionRouter2.FLOYD
+		// // | AStarConnectionRouter2.TEST
+		// // | AStarConnectionRouter2.SHOWPOOL
+		// | AStarConnectionRouter2.FOUR_DIR);
+		// return router;
+		return new MyBendpointConnectionRouter();
+		// return new ManhattanConnectionRouter();
+		// return new BendpointConnectionRouter();
+	}
 
-    public static IEditorPart getCurrentEditor()
-    {
+	public static IEditorPart getCurrentEditor() {
 
-        return PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                .getActivePage().getActiveEditor();
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().getActiveEditor();
 
-    }
+	}
+	public static final Cursor BENDPOINT_VERTICAL_MOVE_CURSOR = new Cursor(null, SWT.CURSOR_SIZEN);
+	public static final Cursor BENDPOINT_HORIZONTAL_MOVE_CURSOR=new Cursor(null,SWT.CURSOR_SIZEE);
 }
