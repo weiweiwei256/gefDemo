@@ -90,19 +90,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		child3.setConstraint(new Rectangle(400, 400, 80, 50));
 		child3.setText("child3");
 		contents.addChild(child3);
-		// 106, 378, 439, 378
-		// 创建连线
-		// 创建自动布线连线
-		// LineConnectionModel line1 = new LineConnectionModel();
-		// line1.setManual(false);
-		// line1.setSource(child1);
-		// line1.setTarget(child2);
-		// line1.attachSource();
-		// line1.attachTarget();
-		// 创建手动布线的连线
-
 		viewer.setContents(contents);
-
 		// Connection层布线策略
 		ConnectionLayer connLayer = (ConnectionLayer) LayerManager.Helper.find(
 				getGraphicalViewer().getContents()).getLayer(

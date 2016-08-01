@@ -6,6 +6,11 @@ import org.eclipse.gef.handles.BendpointCreationHandle;
 
 import wei.learn.gef.helper.Utility;
 
+/**
+ * ÒÆ¶¯ÏßµÄHandle
+ * @author Administrator
+ *
+ */
 public class CustomBendpointHandle extends BendpointCreationHandle {
 
 	public CustomBendpointHandle(ConnectionEditPart owner, int index,
