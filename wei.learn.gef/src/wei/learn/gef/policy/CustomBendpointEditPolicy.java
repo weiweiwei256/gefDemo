@@ -14,14 +14,14 @@ import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.BendpointEditPolicy;
+import org.eclipse.gef.handles.BendpointHandle;
 import org.eclipse.gef.requests.BendpointRequest;
-import org.eclipse.swt.internal.win32.BP_PAINTPARAMS;
 
 import wei.learn.gef.command.DeleteBendpointCommand;
 import wei.learn.gef.command.MoveBendpointCommand;
 import wei.learn.gef.command.MultiCommand;
-import wei.learn.gef.handle.CustomBendpointHandle;
-import wei.learn.gef.model.AbstractConnectionModel;
+import wei.learn.gef.handle.CustomBendpointCreationHandle;
+import wei.learn.gef.handle.CustomBendpointMoveHandle;
 
 // ide: BendpointPolicy
 /**
@@ -37,7 +37,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 	private boolean deleteBendpoint = false; // 当前是否是删除状态
 	private boolean testDelete = false; // 检测到删除状态
 	private int[] deleteIndexs = null;
-	private int changeIndex;
+	private int changeIndex = -1;
 	private Point orginPoint;
 	private Bendpoint changePoint;
 	// 这里用于临时存储数据. 方便在 Movefeedback和deletefeedback来回切换
@@ -46,37 +46,67 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 	private Point fborderPoint;
 	private Point nborderPoint;
 
-	@Override
+	private void resetData() {
+		deleteBendpoint = false;
+		testDelete = false;
+		deleteIndexs = null;
+		changeIndex = -1;
+
+	}
+
 	public Command getCommand(Request request) {
 		if (REQ_MOVE_BENDPOINT.equals(request.getType())) {
-			return getMoveBendpointCommand((BendpointRequest) request);
-		}
-		if (REQ_CREATE_BENDPOINT.equals(request.getType())) {
 			if (deleteBendpoint)
 				return getDeleteBendpointCommand((BendpointRequest) request);
-			return getCreateBendpointCommand((BendpointRequest) request);
+			return getMoveBendpointCommand((BendpointRequest) request);
 		}
+		if (REQ_CREATE_BENDPOINT.equals(request.getType()))
+			return getCreateBendpointCommand((BendpointRequest) request);
 		return null;
 	}
 
+	@Override
+	protected List<BendpointHandle> createSelectionHandles() {
+		List<BendpointHandle> list = new ArrayList<BendpointHandle>();
+		ConnectionEditPart connEP = (ConnectionEditPart) getHost();
+		PointList points = getConnection().getPoints();
+		Point fPoint; // forward point
+		Point cPoint; // current point
+		Point nPoint; // next point
+		for (int i = 1; i < points.size() - 1; i++) { // 从第一个点到倒数第二个点的遍历
+			fPoint = points.getPoint(i - 1);
+			cPoint = points.getPoint(i);
+			nPoint = points.getPoint(i + 1);
+			CustomBendpointCreationHandle cHandle = new CustomBendpointCreationHandle(
+					connEP, i, i);
+			// 判断形状 转角需要考虑方向 所以一共8种情况 通过下面根据x,y的增减变化的方式可以快速判断
+			if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
+					* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) < 0) {
+				cHandle.setCursorDirection(CustomBendpointCreationHandle.NORTHEAST);
+			} else if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
+					* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) > 0) {
+				cHandle.setCursorDirection(CustomBendpointCreationHandle.NORTHWEST);
+			}
+			list.add(cHandle);
+
+			if (i > 0 && i < points.size() - 2) {
+				list.add(new CustomBendpointMoveHandle(connEP, i - 1, i));
+			}
+		}
+		return list;
+	}
+
 	/*
-	 * 重写CreateBendpointCommand 本来用于创建Bendpoint的命令改为:移动bendpoint两端的bendpoints
+	 * 移动bendpoint两端的bendpoints
 	 */
 	@Override
-	protected Command getCreateBendpointCommand(BendpointRequest request) {
+	protected Command getMoveBendpointCommand(BendpointRequest request) {
 		MoveBendpointCommand moveCom = new MoveBendpointCommand();
-		Point mousePoint = request.getLocation();
+		Point mouseLocation = request.getLocation();
 		int reqIndex = request.getIndex();
-		getConnection().translateToRelative(mousePoint);
-		List<Point> points = ((AbstractConnectionModel) getHost().getModel())
-				.getBendpoints(); // 原有布线结果
-		List<Point> constraint = (List<Point>) getConnection()
-				.getRoutingConstraint();
-		// 准备数据
-		Point fPoint = constraint.get(reqIndex);
-		Point nPoint = constraint.get(reqIndex + 1);
-		Map<Integer, Point> changePoints = changeRelatePoints(mousePoint,
-				fPoint, nPoint, reqIndex);
+		getConnection().translateToRelative(mouseLocation);
+
+		Map<Integer, Point> changePoints = handlebendpointMove(request);
 		// 修改线
 		if (!changePoints.isEmpty()) {
 			Point[] newLocs = new Point[changePoints.size()];
@@ -115,32 +145,16 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 	}
 
 	@Override
-	protected Command getMoveBendpointCommand(BendpointRequest request) {
-		return null;
+	protected void eraseConnectionFeedback(BendpointRequest request) {
+		super.eraseConnectionFeedback(request);
+		resetData();
 	}
 
 	@Override
-	protected List createSelectionHandles() {
-		List list = new ArrayList();
-		ConnectionEditPart connEP = (ConnectionEditPart) getHost();
-		PointList points = getConnection().getPoints();
-		int bendPointIndex = 0;
-
-		for (int i = 1; i < points.size() - 2; i++) {
-			// Put a create handle on the middle of every segment
-			list.add(new CustomBendpointHandle(connEP, bendPointIndex, i));
-			bendPointIndex++;
-		}
-
-		return list;
-	}
-
-	@Override
-	protected void showCreateBendpointFeedback(BendpointRequest request) {
-		Point mousePoint = new Point(request.getLocation());
+	protected void showMoveBendpointFeedback(BendpointRequest request) {
+		Point mouseLocation = new Point(request.getLocation());
 		int reqIndex = request.getIndex();
-		List<Point> bendpoints = (List<Point>) getConnection()
-				.getRoutingConstraint();
+		List<Point> bendpoints = getBendpoints();
 		testDelete = false;
 		// 数据准备
 		if (!deleteBendpoint) {
@@ -164,7 +178,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		if (fPoint.y == nPoint.y) // 竖直移动
 		{
 			if (fborderPoint != null) {// 存在前方边界
-				if (Math.abs(mousePoint.y - fborderPoint.y) < CheckDeleteLimit) { // 触发delete
+				if (Math.abs(mouseLocation.y - fborderPoint.y) < CheckDeleteLimit) { // 触发delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(fborderPoint);
@@ -176,7 +190,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 				}
 			}
 			if (nborderPoint != null) {
-				if (Math.abs(mousePoint.y - nborderPoint.y) < CheckDeleteLimit) { // 触发delete
+				if (Math.abs(mouseLocation.y - nborderPoint.y) < CheckDeleteLimit) { // 触发delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(nPoint);
@@ -189,7 +203,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 			}
 		} else if (fPoint.x == nPoint.x) { // 水平移动
 			if (fborderPoint != null) {// 存在前方边界
-				if (Math.abs(mousePoint.x - fborderPoint.x) < CheckDeleteLimit) { // 触发delete
+				if (Math.abs(mouseLocation.x - fborderPoint.x) < CheckDeleteLimit) { // 触发delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(fborderPoint);
@@ -201,7 +215,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 				}
 			}
 			if (nborderPoint != null) {
-				if (Math.abs(mousePoint.x - nborderPoint.x) < CheckDeleteLimit) { // 触发delete
+				if (Math.abs(mouseLocation.x - nborderPoint.x) < CheckDeleteLimit) { // 触发delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(nPoint);
@@ -220,8 +234,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 				deleteBendpoint = true;
 				saveOriginalConstraint();
 				changeIndex = bendpoints.indexOf(orginPoint);
-				List<Point> newBendpoints = (List<Point>) getConnection()
-						.getRoutingConstraint();
+				List<Point> newBendpoints = getBendpoints();
 				newBendpoints.set(changeIndex, (AbsoluteBendpoint) changePoint);
 				for (int i = 0; i < deleteIndexs.length; i++) {
 					newBendpoints.remove(deleteIndexs[i] - i);
@@ -230,18 +243,15 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 			}
 			return;
 		}
-
 		if (deleteBendpoint) {
 			System.err.println("deleteBendpoint is false");
 			deleteBendpoint = false;
 			restoreOriginalConstraint();
 		}
-
-		getConnection().translateToRelative(mousePoint);
+		getConnection().translateToRelative(mouseLocation);
 		saveOriginalConstraint();
-		List<Point> originBendpoints = (List<Point>) getConnection()
-				.getRoutingConstraint();
-		Map<Integer, Point> changePoints = changeRelatePoints(mousePoint,
+		List<Point> originBendpoints = getBendpoints();
+		Map<Integer, Point> changePoints = handlebendpointMove(mouseLocation,
 				fPoint, nPoint, reqIndex);
 		for (Entry<Integer, Point> entry : changePoints.entrySet()) {
 			originBendpoints.set(entry.getKey(),
@@ -250,12 +260,17 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		getConnection().setRoutingConstraint(originBendpoints);
 	}
 
+	@SuppressWarnings("unchecked")
+	private List<Point> getBendpoints() {
+		return (List<Point>) getConnection().getRoutingConstraint();
+	}
+
 	@Override
 	protected void showDeleteBendpointFeedback(BendpointRequest request) {
 		saveOriginalConstraint();
 	}
 
-	private Map<Integer, Point> changeRelatePoints(Point mousePoint,
+	private Map<Integer, Point> handlebendpointMove(Point mouseLocation,
 			Point forwardPoint, Point nextPoint, int fPointIndex) {
 		Map<Integer, Point> changePoints = new HashMap<Integer, Point>();
 		// 将要保存的值
@@ -265,9 +280,9 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		{
 			// y不变 设置x
 			nForwardPoint.y = forwardPoint.y;
-			nForwardPoint.x = mousePoint.x;
+			nForwardPoint.x = mouseLocation.x;
 			nNextPoint.y = nextPoint.y;
-			nNextPoint.x = mousePoint.x;
+			nNextPoint.x = mouseLocation.x;
 
 		}
 
@@ -275,12 +290,107 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		{
 			// x不变 设置y
 			nForwardPoint.x = forwardPoint.x;
-			nForwardPoint.y = mousePoint.y;
+			nForwardPoint.y = mouseLocation.y;
 			nNextPoint.x = nextPoint.x;
-			nNextPoint.y = mousePoint.y;
+			nNextPoint.y = mouseLocation.y;
 		}
 		changePoints.put(fPointIndex, nForwardPoint);
 		changePoints.put(fPointIndex + 1, nNextPoint);
 		return changePoints;
+	}
+
+	private Map<Integer, Point> handlebendpointMove(BendpointRequest request) {
+		int reqIndex = request.getIndex();
+		Point mouseLocation = request.getLocation();
+		List<Point> constraint = getBendpoints();
+		// 准备数据
+		Point fPoint = constraint.get(reqIndex);
+		Point nPoint = constraint.get(reqIndex + 1);
+
+		Map<Integer, Point> changePoints = new HashMap<Integer, Point>();
+		// 将要保存的值
+		Point nForwardPoint = new Point();
+		Point nNextPoint = new Point();
+		if (fPoint.x == nPoint.x) // 检测是否是左右拖动
+		{
+			// y不变 设置x
+			nForwardPoint.y = fPoint.y;
+			nForwardPoint.x = mouseLocation.x;
+			nNextPoint.y = nPoint.y;
+			nNextPoint.x = mouseLocation.x;
+
+		}
+		if (fPoint.y == nPoint.y)// 检测是否是上下拖动
+		{
+			// x不变 设置y
+			nForwardPoint.x = fPoint.x;
+			nForwardPoint.y = mouseLocation.y;
+			nNextPoint.x = nPoint.x;
+			nNextPoint.y = mouseLocation.y;
+		}
+		changePoints.put(reqIndex, nForwardPoint);
+		changePoints.put(reqIndex + 1, nNextPoint);
+		return changePoints;
+	}
+
+	@Override
+	protected Command getCreateBendpointCommand(BendpointRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected void showCreateBendpointFeedback(BendpointRequest request) {
+		Point mouseLocation = new Point(request.getLocation());
+		int reqIndex = request.getIndex();
+		getConnection().translateToRelative(mouseLocation);
+		saveOriginalConstraint();
+		List<Point> constraint = getBendpoints();
+		// 数据准备 处理依赖相邻点的位置
+		Point fPoint = null; // forward
+		Point cPoint;
+		Point nPoint = null;
+		fPoint = constraint.get(reqIndex - 1);
+		cPoint = constraint.get(reqIndex);
+		nPoint = constraint.get(reqIndex + 1);
+		Map<Integer, Point> changePoints = bendpointCreationRelatePoints(
+				mouseLocation, fPoint, cPoint, nPoint, reqIndex);
+		// 获取鼠标拖动的象限
+
+		getConnection().setRoutingConstraint(constraint);
+	}
+
+	private Map<Integer, Point> bendpointCreationRelatePoints(Point mousePoint,
+			Point fPoint, Point cPoint, Point nPoint, int fPointIndex) {
+		boolean addLine = false; // true 则启动增加线的相应; false 移动线的相应
+		// 确定自己的形状
+		if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
+				* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) < 0) {// Northeast
+			if (cPoint.x == fPoint.x && cPoint.y > fPoint.y) // 第一象限
+			{
+				if (cPoint.x < mousePoint.x && cPoint.y > mousePoint.y) {
+					addLine = true;
+				}
+			} else { // 第三象限
+				if (cPoint.x > mousePoint.x && cPoint.y < mousePoint.y) {
+					addLine = true;
+				}
+			}
+		} else if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
+				* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) > 0) { // Northwest
+			if (cPoint.x == fPoint.x && cPoint.y > fPoint.y) // 第第二象限
+			{
+				if (cPoint.x > mousePoint.x && cPoint.y > mousePoint.y) {
+					addLine = true;
+				}
+			} else { // 第四象限
+				if (cPoint.x < mousePoint.x && cPoint.y < mousePoint.y) {
+					addLine = true;
+				}
+			}
+		}
+		
+		
+
+		return null;
 	}
 }

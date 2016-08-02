@@ -3,7 +3,6 @@ package wei.learn.gef.helper;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -34,4 +33,7 @@ public class Utility {
 	}
 	public static final Cursor BENDPOINT_VERTICAL_MOVE_CURSOR = new Cursor(null, SWT.CURSOR_SIZEN);
 	public static final Cursor BENDPOINT_HORIZONTAL_MOVE_CURSOR=new Cursor(null,SWT.CURSOR_SIZEE);
+	public static final Cursor BENDPOINT_NORTHEAST_MOVE_CURSOR=new Cursor(null,SWT.CURSOR_SIZENESW);
+	public static final Cursor BENDPOINT_NORTHWEST_MOVE_CURSOR=new Cursor(null,SWT.CURSOR_SIZENWSE);
+	public static final Cursor BENDPOINT_ALL_MOVE_CURSOR=new Cursor(null,SWT.CURSOR_SIZEALL);
 }
