@@ -8,10 +8,12 @@ import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.LayerConstants;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.palette.ConnectionCreationToolEntry;
@@ -23,6 +25,8 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.SelectionToolEntry;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gef.requests.SimpleFactory;
+import org.eclipse.gef.tools.MarqueeDragTracker;
+import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -54,12 +58,20 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		setEditDomain(new DefaultEditDomain(this));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
 		viewer = getGraphicalViewer();
 		viewer.setEditPartFactory(new PartFactory());
-		ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart();
+		ScalableFreeformRootEditPart rootEditPart = new ScalableFreeformRootEditPart(){
+			@Override
+			public DragTracker getDragTracker(Request req) {
+				MarqueeDragTracker dt=	new MarqueeDragTracker();
+				dt.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
+				return dt;
+			}
+		};
 		viewer.setRootEditPart(rootEditPart);
 		// 创建键盘句柄keyHander
 		KeyHandler keyHandler = new KeyHandler();
@@ -78,7 +90,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		// set the contents of this editor
 		ContentsModel contents = new ContentsModel();
 		HelloModel child1 = new HelloModel();
-		child1.setConstraint(new Rectangle(400, 20, 80,50));
+		child1.setConstraint(new Rectangle(400, 20, 80, 50));
 		child1.setText("child1");
 		contents.addChild(child1);
 		HelloModel child2 = new HelloModel();
@@ -104,14 +116,13 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		line1.setTarget(child2);
 		line1.attachSource();
 		line1.attachTarget();
-		
-		
+
 		LineConnectionModel line2 = new LineConnectionModel();
 		List<Point> points2 = new ArrayList<Point>();
 		points2.add(new Point(125, 200));
 		points2.add(new Point(239, 200));
-		points2.add(new Point(239,290));
-		points2.add(new Point(439,290));
+		points2.add(new Point(239, 290));
+		points2.add(new Point(439, 290));
 		line2.setBendpoints(points2);
 		line2.setSource(child2);
 		line2.setTarget(child3);
@@ -140,7 +151,10 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		root.setDefaultEntry(tool);
 
 		// 4.0 创建一个GEF提供的 "Marquee多选"工具并将其放到toolGroup中
-		tool = new MarqueeToolEntry();
+		tool = new MarqueeToolEntry(); //修改区域选择tool支持选中关联连线
+		tool.setToolProperty(
+				MarqueeSelectionTool.PROPERTY_MARQUEE_BEHAVIOR,
+				MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		toolGroup.add(tool);
 
 		// 5.0 创建一个Drawer(抽屉)放置绘图工具,该抽屉名称为"画图"
@@ -198,6 +212,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		return root;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void createActions() {
 		super.createActions();
