@@ -59,7 +59,11 @@ public class AbstractConnectionModel extends AbstractModel {
 	}
 
 	public void replaceBendpoint(int index, Point point) {
-		bendpoints.set(index, point);
+		if (index < bendpoints.size()) {
+			bendpoints.set(index, point);
+		} else {
+			bendpoints.add(index, point);
+		}
 		firePropertyChange(P_BEND_POINT, null, null);
 	}
 

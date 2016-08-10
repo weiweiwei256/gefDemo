@@ -1,5 +1,7 @@
 package wei.learn.gef.command;
 
+import java.util.List;
+
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.Command;
 
@@ -15,7 +17,12 @@ public class MoveBendpointCommand extends Command {
 	public void execute() {
 		oldLocation = new Point[size];
 		for (int i = 0; i < size; i++) {
-			oldLocation[i] = conn.getBendpoints().get(index[i]);
+			List<Point> points = conn.getBendpoints();
+			if (index[i] < points.size()) {
+				oldLocation[i] = points.get(index[i]);
+			} else {
+				oldLocation[i] = null;
+			}
 			conn.replaceBendpoint(index[i], newLocation[i]);
 		}
 	}
@@ -36,7 +43,7 @@ public class MoveBendpointCommand extends Command {
 	@Override
 	public void undo() {
 		for (int i = 0; i < size; i++) {
-		conn.replaceBendpoint(index[i], oldLocation[i]);
+			conn.replaceBendpoint(index[i], oldLocation[i]);
 		}
 	}
 }
