@@ -24,8 +24,8 @@ public class HelloBottomAnchor extends AbstractConnectionAnchor
         r.resize(1, 1);
         getOwner().translateToAbsolute(r);
         int x = r.x + r.width / 2;
-        int y = r.y + r.height;
-        return new Point(x, y-10);
+        int y = r.y + r.height-10;
+        return new Point(x, y);
     }
 
     protected Rectangle getBox()

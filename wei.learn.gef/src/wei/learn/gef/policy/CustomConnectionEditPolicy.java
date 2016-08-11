@@ -1,4 +1,4 @@
-package wei.learn.gef.policy;
+﻿package wei.learn.gef.policy;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ConnectionEditPolicy;

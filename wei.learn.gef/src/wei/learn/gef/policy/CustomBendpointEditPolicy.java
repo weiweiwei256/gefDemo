@@ -1,4 +1,4 @@
-package wei.learn.gef.policy;
+ï»¿package wei.learn.gef.policy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,12 +20,11 @@ import org.eclipse.gef.requests.BendpointRequest;
 import wei.learn.gef.command.DeleteBendpointCommand;
 import wei.learn.gef.command.MoveBendpointCommand;
 import wei.learn.gef.command.MultiCommand;
-import wei.learn.gef.handle.CustomBendpointCreationHandle;
 import wei.learn.gef.handle.CustomBendpointMoveHandle;
 
 // ide: BendpointPolicy
 /**
- * ÓÉÓÚÒÑÓĞµÄÁ¬ÏßÄ£Ê½ÊÇË®Æ½ÊúÖ±µÄ ËùÒÔÒª¶ÔÒÑÓĞµÄ¼òµ¥µÄbendpointµÄ´´½¨ÒÆ¶¯µÄ·½Ê½ÖØĞÂ¹¹½¨
+ * ç”±äºå·²æœ‰çš„è¿çº¿æ¨¡å¼æ˜¯æ°´å¹³ç«–ç›´çš„ æ‰€ä»¥è¦å¯¹å·²æœ‰çš„ç®€å•çš„bendpointçš„åˆ›å»ºç§»åŠ¨çš„æ–¹å¼é‡æ–°æ„å»º
  * 
  * @author Administrator
  *
@@ -34,13 +33,13 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 
 	private static final int CheckDeleteLimit = 10;
 
-	private boolean deleteBendpoint = false; // µ±Ç°ÊÇ·ñÊÇÉ¾³ı×´Ì¬
-	private boolean testDelete = false; // ¼ì²âµ½É¾³ı×´Ì¬
+	private boolean deleteBendpoint = false; // å½“å‰æ˜¯å¦æ˜¯åˆ é™¤çŠ¶æ€
+	private boolean testDelete = false; // æ£€æµ‹åˆ°åˆ é™¤çŠ¶æ€
 	private int[] deleteIndexs = null;
 	private int changeIndex = -1;
 	private Point orginPoint;
 	private Bendpoint changePoint;
-	// ÕâÀïÓÃÓÚÁÙÊ±´æ´¢Êı¾İ. ·½±ãÔÚ MovefeedbackºÍdeletefeedbackÀ´»ØÇĞ»»
+	// è¿™é‡Œç”¨äºä¸´æ—¶å­˜å‚¨æ•°æ®. æ–¹ä¾¿åœ¨ Movefeedbackå’Œdeletefeedbackæ¥å›åˆ‡æ¢
 	private Point fPoint;
 	private Point nPoint;
 	private Point fborderPoint;
@@ -60,8 +59,6 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 				return getDeleteBendpointCommand((BendpointRequest) request);
 			return getMoveBendpointCommand((BendpointRequest) request);
 		}
-		if (REQ_CREATE_BENDPOINT.equals(request.getType()))
-			return getCreateBendpointCommand((BendpointRequest) request);
 		return null;
 	}
 
@@ -70,44 +67,28 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		List<BendpointHandle> list = new ArrayList<BendpointHandle>();
 		ConnectionEditPart connEP = (ConnectionEditPart) getHost();
 		PointList points = getConnection().getPoints();
-		Point fPoint; // forward point
-		Point cPoint; // current point
-		Point nPoint; // next point
-		for (int i = 1; i < points.size() - 1; i++) { // ´ÓµÚÒ»¸öµãµ½µ¹ÊıµÚ¶ş¸öµãµÄ±éÀú
-			fPoint = points.getPoint(i - 1);
-			cPoint = points.getPoint(i);
-			nPoint = points.getPoint(i + 1);
-			CustomBendpointCreationHandle cHandle = new CustomBendpointCreationHandle(
-					connEP, i, i);
-			// ÅĞ¶ÏĞÎ×´ ×ª½ÇĞèÒª¿¼ÂÇ·½Ïò ËùÒÔÒ»¹²8ÖÖÇé¿ö Í¨¹ıÏÂÃæ¸ù¾İx,yµÄÔö¼õ±ä»¯µÄ·½Ê½¿ÉÒÔ¿ìËÙÅĞ¶Ï
-			if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
-					* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) < 0) {
-				cHandle.setCursorDirection(CustomBendpointCreationHandle.NORTHEAST);
-			} else if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
-					* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) > 0) {
-				cHandle.setCursorDirection(CustomBendpointCreationHandle.NORTHWEST);
-			}
-			list.add(cHandle);
-
-			if (i > 0 && i < points.size() - 2) {
-				list.add(new CustomBendpointMoveHandle(connEP, i - 1, i));
-			}
+		for (int i = 1; i < points.size() - 2; i++) { // ä»ç¬¬ä¸€ä¸ªç‚¹åˆ°å€’æ•°ç¬¬äºŒä¸ªç‚¹çš„éå†
+			list.add(new CustomBendpointMoveHandle(connEP, i - 1, i));
 		}
 		return list;
 	}
 
 	/*
-	 * ÒÆ¶¯bendpointÁ½¶ËµÄbendpoints
+	 * ç§»åŠ¨bendpointä¸¤ç«¯çš„bendpoints
 	 */
 	@Override
 	protected Command getMoveBendpointCommand(BendpointRequest request) {
 		MoveBendpointCommand moveCom = new MoveBendpointCommand();
 		Point mouseLocation = request.getLocation();
-		int reqIndex = request.getIndex();
 		getConnection().translateToRelative(mouseLocation);
-
-		Map<Integer, Point> changePoints = handlebendpointMove(request);
-		// ĞŞ¸ÄÏß
+		// å‡†å¤‡æ•°æ®
+		int reqIndex = request.getIndex();
+		List<Point> constraint = getBendpoints();
+		Point fPoint = constraint.get(reqIndex);
+		Point nPoint = constraint.get(reqIndex + 1);
+		Map<Integer, Point> changePoints = handlebendpointMove(mouseLocation,
+				fPoint, nPoint, reqIndex);
+		// ä¿®æ”¹çº¿
 		if (!changePoints.isEmpty()) {
 			Point[] newLocs = new Point[changePoints.size()];
 			int[] indexs = new int[changePoints.size()];
@@ -130,13 +111,13 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		MultiCommand multiCmd = new MultiCommand();
 		List<Command> cmds = new ArrayList<Command>();
 		multiCmd.setCommands(cmds);
-		// ÒÆ¶¯Ïà¹Øµã
+		// ç§»åŠ¨ç›¸å…³ç‚¹
 		MoveBendpointCommand moveCmd = new MoveBendpointCommand();
 		moveCmd.setConnection(getHost().getModel());
 		moveCmd.setIndex(new int[] { changeIndex });
 		moveCmd.setNewLocation(new Point[] { (Point) changePoint });
 		cmds.add(moveCmd);
-		// É¾³ıÖØºÏµã
+		// åˆ é™¤é‡åˆç‚¹
 		DeleteBendpointCommand delCmd = new DeleteBendpointCommand();
 		delCmd.setConnection(getHost().getModel());
 		delCmd.setIndex(deleteIndexs);
@@ -156,15 +137,15 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		int reqIndex = request.getIndex();
 		List<Point> bendpoints = getBendpoints();
 		testDelete = false;
-		// Êı¾İ×¼±¸
+		// æ•°æ®å‡†å¤‡
 		if (!deleteBendpoint) {
-			// ×¼±¸Êı¾İ
+			// å‡†å¤‡æ•°æ®
 			fPoint = bendpoints.get(reqIndex);
 			nPoint = bendpoints.get(reqIndex + 1);
-			fborderPoint = null; // Ç°·½±ß½ç
-			nborderPoint = null; // ºó·½±ß½ç
+			fborderPoint = null; // å‰æ–¹è¾¹ç•Œ
+			nborderPoint = null; // åæ–¹è¾¹ç•Œ
 			deleteIndexs = new int[2];
-			// ³öÏÖÏß¶ÔÆëºó,ĞèÒªĞŞ¸ÄµÄÊı¾İ
+			// å‡ºç°çº¿å¯¹é½å,éœ€è¦ä¿®æ”¹çš„æ•°æ®
 			if (reqIndex > 0) {
 				fborderPoint = bendpoints.get(reqIndex - 1);
 			}
@@ -175,10 +156,10 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 
 		orginPoint = null;
 		changePoint = null;
-		if (fPoint.y == nPoint.y) // ÊúÖ±ÒÆ¶¯
+		if (fPoint.y == nPoint.y) // ç«–ç›´ç§»åŠ¨
 		{
-			if (fborderPoint != null) {// ´æÔÚÇ°·½±ß½ç
-				if (Math.abs(mouseLocation.y - fborderPoint.y) < CheckDeleteLimit) { // ´¥·¢delete
+			if (fborderPoint != null) {// å­˜åœ¨å‰æ–¹è¾¹ç•Œ
+				if (Math.abs(mouseLocation.y - fborderPoint.y) < CheckDeleteLimit) { // è§¦å‘delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(fborderPoint);
@@ -190,7 +171,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 				}
 			}
 			if (nborderPoint != null) {
-				if (Math.abs(mouseLocation.y - nborderPoint.y) < CheckDeleteLimit) { // ´¥·¢delete
+				if (Math.abs(mouseLocation.y - nborderPoint.y) < CheckDeleteLimit) { // è§¦å‘delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(nPoint);
@@ -201,9 +182,9 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 							nborderPoint.y);
 				}
 			}
-		} else if (fPoint.x == nPoint.x) { // Ë®Æ½ÒÆ¶¯
-			if (fborderPoint != null) {// ´æÔÚÇ°·½±ß½ç
-				if (Math.abs(mouseLocation.x - fborderPoint.x) < CheckDeleteLimit) { // ´¥·¢delete
+		} else if (fPoint.x == nPoint.x) { // æ°´å¹³ç§»åŠ¨
+			if (fborderPoint != null) {// å­˜åœ¨å‰æ–¹è¾¹ç•Œ
+				if (Math.abs(mouseLocation.x - fborderPoint.x) < CheckDeleteLimit) { // è§¦å‘delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(fborderPoint);
@@ -215,7 +196,7 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 				}
 			}
 			if (nborderPoint != null) {
-				if (Math.abs(mouseLocation.x - nborderPoint.x) < CheckDeleteLimit) { // ´¥·¢delete
+				if (Math.abs(mouseLocation.x - nborderPoint.x) < CheckDeleteLimit) { // è§¦å‘delete
 					testDelete = true;
 					if (!deleteBendpoint) {
 						deleteIndexs[0] = bendpoints.indexOf(nPoint);
@@ -260,25 +241,15 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		getConnection().setRoutingConstraint(originBendpoints);
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<Point> getBendpoints() {
-		return (List<Point>) getConnection().getRoutingConstraint();
-	}
-
-	@Override
-	protected void showDeleteBendpointFeedback(BendpointRequest request) {
-		saveOriginalConstraint();
-	}
-
 	private Map<Integer, Point> handlebendpointMove(Point mouseLocation,
 			Point forwardPoint, Point nextPoint, int fPointIndex) {
 		Map<Integer, Point> changePoints = new HashMap<Integer, Point>();
-		// ½«Òª±£´æµÄÖµ
+		// å°†è¦ä¿å­˜çš„å€¼
 		Point nForwardPoint = new Point();
 		Point nNextPoint = new Point();
-		if (forwardPoint.x == nextPoint.x) // ¼ì²âÊÇ·ñÊÇ×óÓÒÍÏ¶¯
+		if (forwardPoint.x == nextPoint.x) // æ£€æµ‹æ˜¯å¦æ˜¯å·¦å³æ‹–åŠ¨
 		{
-			// y²»±ä ÉèÖÃx
+			// yä¸å˜ è®¾ç½®x
 			nForwardPoint.y = forwardPoint.y;
 			nForwardPoint.x = mouseLocation.x;
 			nNextPoint.y = nextPoint.y;
@@ -286,9 +257,9 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 
 		}
 
-		if (forwardPoint.y == nextPoint.y)// ¼ì²âÊÇ·ñÊÇÉÏÏÂÍÏ¶¯
+		if (forwardPoint.y == nextPoint.y)// æ£€æµ‹æ˜¯å¦æ˜¯ä¸Šä¸‹æ‹–åŠ¨
 		{
-			// x²»±ä ÉèÖÃy
+			// xä¸å˜ è®¾ç½®y
 			nForwardPoint.x = forwardPoint.x;
 			nForwardPoint.y = mouseLocation.y;
 			nNextPoint.x = nextPoint.x;
@@ -299,98 +270,13 @@ public class CustomBendpointEditPolicy extends BendpointEditPolicy {
 		return changePoints;
 	}
 
-	private Map<Integer, Point> handlebendpointMove(BendpointRequest request) {
-		int reqIndex = request.getIndex();
-		Point mouseLocation = request.getLocation();
-		List<Point> constraint = getBendpoints();
-		// ×¼±¸Êı¾İ
-		Point fPoint = constraint.get(reqIndex);
-		Point nPoint = constraint.get(reqIndex + 1);
-
-		Map<Integer, Point> changePoints = new HashMap<Integer, Point>();
-		// ½«Òª±£´æµÄÖµ
-		Point nForwardPoint = new Point();
-		Point nNextPoint = new Point();
-		if (fPoint.x == nPoint.x) // ¼ì²âÊÇ·ñÊÇ×óÓÒÍÏ¶¯
-		{
-			// y²»±ä ÉèÖÃx
-			nForwardPoint.y = fPoint.y;
-			nForwardPoint.x = mouseLocation.x;
-			nNextPoint.y = nPoint.y;
-			nNextPoint.x = mouseLocation.x;
-
-		}
-		if (fPoint.y == nPoint.y)// ¼ì²âÊÇ·ñÊÇÉÏÏÂÍÏ¶¯
-		{
-			// x²»±ä ÉèÖÃy
-			nForwardPoint.x = fPoint.x;
-			nForwardPoint.y = mouseLocation.y;
-			nNextPoint.x = nPoint.x;
-			nNextPoint.y = mouseLocation.y;
-		}
-		changePoints.put(reqIndex, nForwardPoint);
-		changePoints.put(reqIndex + 1, nNextPoint);
-		return changePoints;
+	@SuppressWarnings("unchecked")
+	private List<Point> getBendpoints() {
+		return (List<Point>) getConnection().getRoutingConstraint();
 	}
 
 	@Override
 	protected Command getCreateBendpointCommand(BendpointRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	protected void showCreateBendpointFeedback(BendpointRequest request) {
-		Point mouseLocation = new Point(request.getLocation());
-		int reqIndex = request.getIndex();
-		getConnection().translateToRelative(mouseLocation);
-		saveOriginalConstraint();
-		List<Point> constraint = getBendpoints();
-		// Êı¾İ×¼±¸ ´¦ÀíÒÀÀµÏàÁÚµãµÄÎ»ÖÃ
-		Point fPoint = null; // forward
-		Point cPoint;
-		Point nPoint = null;
-		fPoint = constraint.get(reqIndex - 1);
-		cPoint = constraint.get(reqIndex);
-		nPoint = constraint.get(reqIndex + 1);
-		Map<Integer, Point> changePoints = bendpointCreationRelatePoints(
-				mouseLocation, fPoint, cPoint, nPoint, reqIndex);
-		// »ñÈ¡Êó±êÍÏ¶¯µÄÏóÏŞ
-
-		getConnection().setRoutingConstraint(constraint);
-	}
-
-	private Map<Integer, Point> bendpointCreationRelatePoints(Point mousePoint,
-			Point fPoint, Point cPoint, Point nPoint, int fPointIndex) {
-		boolean addLine = false; // true ÔòÆô¶¯Ôö¼ÓÏßµÄÏàÓ¦; false ÒÆ¶¯ÏßµÄÏàÓ¦
-		// È·¶¨×Ô¼ºµÄĞÎ×´
-		if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
-				* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) < 0) {// Northeast
-			if (cPoint.x == fPoint.x && cPoint.y > fPoint.y) // µÚÒ»ÏóÏŞ
-			{
-				if (cPoint.x < mousePoint.x && cPoint.y > mousePoint.y) {
-					addLine = true;
-				}
-			} else { // µÚÈıÏóÏŞ
-				if (cPoint.x > mousePoint.x && cPoint.y < mousePoint.y) {
-					addLine = true;
-				}
-			}
-		} else if ((cPoint.x - fPoint.x + cPoint.y - fPoint.y)
-				* ((cPoint.x - nPoint.x + cPoint.y - nPoint.y)) > 0) { // Northwest
-			if (cPoint.x == fPoint.x && cPoint.y > fPoint.y) // µÚµÚ¶şÏóÏŞ
-			{
-				if (cPoint.x > mousePoint.x && cPoint.y > mousePoint.y) {
-					addLine = true;
-				}
-			} else { // µÚËÄÏóÏŞ
-				if (cPoint.x < mousePoint.x && cPoint.y < mousePoint.y) {
-					addLine = true;
-				}
-			}
-		}
-		
-		
-
 		return null;
 	}
 }

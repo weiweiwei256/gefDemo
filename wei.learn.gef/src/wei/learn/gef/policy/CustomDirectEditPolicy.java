@@ -1,4 +1,4 @@
-package wei.learn.gef.policy;
+ï»¿package wei.learn.gef.policy;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
@@ -9,7 +9,7 @@ import wei.learn.gef.command.DirectEditCommand;
 public class CustomDirectEditPolicy extends DirectEditPolicy {
 
 	@Override
-	//µ±µ±Ñ¡ÖĞcell editor,ĞŞ¸ÄÎÄ±¾,cell editorÊ§È¥½¹µãÖ®Ç°getDirectEditCoommand·½·¨
+	//å½“å½“é€‰ä¸­cell editor,ä¿®æ”¹æ–‡æœ¬,cell editorå¤±å»ç„¦ç‚¹ä¹‹å‰getDirectEditCoommandæ–¹æ³•
 	protected Command getDirectEditCommand(DirectEditRequest request) {
 		DirectEditCommand command = new DirectEditCommand();
 		command.setModel(getHost().getModel());
@@ -18,8 +18,8 @@ public class CustomDirectEditPolicy extends DirectEditPolicy {
 	}
 
 	@Override
-	//showCurrentEditValue·½·¨ÓÃÓÚÏÔÊ¾FigureÖĞµÄµ±Ç°Ö±½Ó±à¼­Öµ
-	//ËäÈ»CellEditor¿ÉÄÜ¸Ç×¡ÁËÍ¼ĞÎ¶Ô¸ÃÖµµÄÏÔÊ¾,µ«ÊÇ¸üĞÂÍ¼ĞÎ»áÊ¹Æä×îÓÅ³ß´çÊÊÓ¦ĞÂÖµ
+	//showCurrentEditValueæ–¹æ³•ç”¨äºæ˜¾ç¤ºFigureä¸­çš„å½“å‰ç›´æ¥ç¼–è¾‘å€¼
+	//è™½ç„¶CellEditorå¯èƒ½ç›–ä½äº†å›¾å½¢å¯¹è¯¥å€¼çš„æ˜¾ç¤º,ä½†æ˜¯æ›´æ–°å›¾å½¢ä¼šä½¿å…¶æœ€ä¼˜å°ºå¯¸é€‚åº”æ–°å€¼
 	protected void showCurrentEditValue(DirectEditRequest request) {
 		// TODO Auto-generated method stub
 

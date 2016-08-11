@@ -1,4 +1,4 @@
-package wei.learn.gef.policy;
+﻿package wei.learn.gef.policy;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
@@ -7,7 +7,7 @@ import org.eclipse.gef.requests.ReconnectRequest;
 
 import wei.learn.gef.command.CreateConnectionCommand;
 import wei.learn.gef.command.ReconnectConnectionCommand;
-//ide�ж�Ӧ�ࣺ GraphicalNodePolicy
+//ide中对应类： GraphicalNodePolicy
 public class CustomGraphicalNodeEditPolicy extends GraphicalNodeEditPolicy
 {
 

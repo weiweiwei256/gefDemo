@@ -90,7 +90,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		// set the contents of this editor
 		ContentsModel contents = new ContentsModel();
 		HelloModel child1 = new HelloModel();
-		child1.setConstraint(new Rectangle(400, 20, 80, 50));
+		child1.setConstraint(new Rectangle(100, 80, -1, -1));
 		child1.setText("child1");
 		contents.addChild(child1);
 		HelloModel child2 = new HelloModel();
@@ -107,16 +107,18 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 				getGraphicalViewer().getContents()).getLayer(
 				LayerConstants.CONNECTION_LAYER);
 		connLayer.setConnectionRouter(Utility.getRouter(this));
+		//增加第一条线
 		LineConnectionModel line1 = new LineConnectionModel();
 		List<Point> points1 = new ArrayList<Point>();
-		points1.add(new Point(439, 100));
-		points1.add(new Point(125, 100));
+//		points1.add(new Point(439, 100));
+//		points1.add(new Point(125, 100));
 		line1.setBendpoints(points1);
 		line1.setSource(child1);
 		line1.setTarget(child2);
 		line1.attachSource();
 		line1.attachTarget();
 
+		//增加第二条线
 		LineConnectionModel line2 = new LineConnectionModel();
 		List<Point> points2 = new ArrayList<Point>();
 		points2.add(new Point(125, 200));
