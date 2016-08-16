@@ -110,8 +110,8 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 		//增加第一条线
 		LineConnectionModel line1 = new LineConnectionModel();
 		List<Point> points1 = new ArrayList<Point>();
-//		points1.add(new Point(439, 100));
-//		points1.add(new Point(125, 100));
+		points1.add(new Point(439, 100));
+		points1.add(new Point(125, 100));
 		line1.setBendpoints(points1);
 		line1.setSource(child1);
 		line1.setTarget(child2);

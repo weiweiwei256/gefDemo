@@ -16,8 +16,8 @@ public class MoveBendpointCommand extends Command {
 	@Override
 	public void execute() {
 		oldLocation = new Point[size];
+		List<Point> points = conn.getBendpoints();
 		for (int i = 0; i < size; i++) {
-			List<Point> points = conn.getBendpoints();
 			if (index[i] < points.size()) {
 				oldLocation[i] = points.get(index[i]);
 			} else {
