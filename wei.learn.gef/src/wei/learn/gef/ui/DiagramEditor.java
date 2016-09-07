@@ -134,7 +134,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
