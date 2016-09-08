@@ -182,7 +182,7 @@ public class DiagramEditor extends GraphicalEditorWithPalette {
 				"简单链接", "创建简单连接", new SimpleFactory(LineConnectionModel.class),
 				newConnectionDescriptor, newConnectionDescriptor);
 		connectionDrawer.add(connCreationEntry);
-
+		//test gerrit
 		// 箭头连线
 		PaletteDrawer ArrowConnectionDrawer = new PaletteDrawer("箭头连线");
 		ImageDescriptor newArrowConnectionDescriptor = AbstractUIPlugin
