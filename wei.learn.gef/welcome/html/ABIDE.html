@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <title>ABIDE开发欢迎页</title>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#example-navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img class="navbar-brand" src="../resource/images/abide_32_32.png"></img>
+            <a class="navbar-brand" href="#">ABIDE</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="../welcome.html">返回导航</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-xs-12 column">
+            <div class="row clearfix">
+                <div class="col-xs-12 column">
+                    <div class="page-header">
+                        <h1 class="text-center">
+                           ABIDE <small>AB交易集成开发环境</small>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-xs-3 column">
+                    <img class="img-rounded responsive center-block" alt="140x140" src="../resource/images/mobile.png"/>
+
+                    <p class="text-center text-info">
+                        新建APP工程
+                    </p>
+                </div>
+                <div class="col-xs-3 column">
+                    <img class="img-rounded responsive center-block" alt="140x140" src="../resource/images/mobile.png"/>
+
+                    <p class="text-center text-info">
+                        新建服务工程
+                    </p>
+                </div>
+                <div class="col-xs-3 column">
+                    <img class="img-rounded responsive center-block" alt="140x140" src="../resource/images/mobile.png"/>
+
+                    <p class="text-center text-info">
+                        新建移动工程
+                    </p>
+                </div>
+                <div class="col-xs-3 column">
+                    <img class="img-rounded responsive center-block " alt="140x140"
+                         src="../resource/images/mobile.png"/>
+
+                    <p class="text-center text-info">
+                        打开工作空间
+                    </p>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-xs-3 column">
+                    <div class="panel-group" id="panel">
+                        <!--summary-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-summary" onclick="configContent('summary')">概述</a>
+                            </div>
+                            <div id="panel-element-summary" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>交易架构</li>
+                                        <li>交易开发</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--tad-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-tad" onclick="configContent('tad')">TAD</a>
+                            </div>
+                            <div id="panel-element-tad" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--mpt-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-mpt" onclick="configContent('mpt')">MPT</a>
+                            </div>
+                            <div id="panel-element-mpt" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--lfc-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-lfc" onclick="configContent('lfc')">LFC</a>
+                            </div>
+                            <div id="panel-element-lfc" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--auf-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-auf" onclick="configContent('auf')">AUF</a>
+                            </div>
+                            <div id="panel-element-auf" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--alr-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-alr" onclick="configContent('alr')">ALR</a>
+                            </div>
+                            <div id="panel-element-alr" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--abf-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-abf" onclick="configContent('abf')">ABF</a>
+                            </div>
+                            <div id="panel-element-abf" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--ade-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-ade" onclick="configContent('ade')">ADE</a>
+                            </div>
+                            <div id="panel-element-ade" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--dnc-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-dnc" onclick="configContent('dnc')">DNC</a>
+                            </div>
+                            <div id="panel-element-dnc" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--sdb-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-sdb" onclick="configContent('sdb')">SDB</a>
+                            </div>
+                            <div id="panel-element-sdb" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--seda-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-seda" onclick="configContent('seda')">SEDA</a>
+                            </div>
+                            <div id="panel-element-seda" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--rcd-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-rcd" onclick="configContent('rcd')">RCD</a>
+                            </div>
+                            <div id="panel-element-rcd" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <!--aft-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel"
+                                   href="#panel-element-aft" onclick="configContent('aft')">AFT</a>
+                            </div>
+                            <div id="panel-element-aft" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>文件定义</li>
+                                        <li>作用说明</li>
+                                        <li>引用资源</li>
+                                        <li>开发操作</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-1 column">
+                </div>
+                <div id="mainContent" class="col-xs-9 column"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe src="abf.html" id="abf_frame" style="display:none"></iframe>
+<iframe src="ade.html" id="ade_frame" style="display:none"></iframe>
+<iframe src="aft.html" id="aft_frame" style="display:none"></iframe>
+<iframe src="alr.html" id="alr_frame" style="display:none"></iframe>
+<iframe src="auf.html" id="auf_frame" style="display:none"></iframe>
+<iframe src="dnc.html" id="dnc_frame" style="display:none"></iframe>
+<iframe src="lfc.html" id="lfc_frame" style="display:none"></iframe>
+<iframe src="mpt.html" id="mpt_frame" style="display:none"></iframe>
+<iframe src="rcd.html" id="rcd_frame" style="display:none"></iframe>
+<iframe src="sdb.html" id="sdb_frame" style="display:none"></iframe>
+<iframe src="seda.html" id="seda_frame" style="display:none"></iframe>
+<iframe src="summary.html" id="summary_frame" style="display:none"></iframe>
+<iframe src="tad.html" id="tad_frame" style="display:none"></iframe>
+<!--引入相关js-->
+<link href="../resource/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+<script src="../resource/lib/jquery/jquery-3.1.0.js"></script>
+<script src="../resource/lib/bootstrap/js/bootstrap.js"></script>
+<script src="../js/welcome.js"></script>
+</body>
+</html>

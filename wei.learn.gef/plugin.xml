@@ -29,6 +29,13 @@
             id="wei.learn.gef.DiagramEditor"
             name="Diagram Editor">
       </editor>
+      <editor
+            class="wei.learn.gef.editor.JCEFEditor"
+            default="false"
+            icon="icons/alt_window16.gif"
+            id="wei.learn.gef.JCEFEditor"
+            name="JCEF Editor">
+      </editor>
    </extension>
 
 </plugin>

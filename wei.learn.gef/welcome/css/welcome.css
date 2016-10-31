@@ -1,0 +1,103 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+.body {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#wrap{
+	margin: 20px;
+	padding: 20px;
+	background-color: #fdf9e7;
+	overflow: auto;
+}
+
+#title{
+	top: 20%;
+	background-color: #CBCBE8;
+	margin-top: 20px;
+	text-align: center;
+}
+
+#abide_login{
+	position: relative;
+
+}
+#wrap #title #abide_name {
+	border-top-left-radius: 0px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	text-shadow: 0px 0px 1px;
+	color: #161617;
+	font-size: large;
+}
+
+
+
+
+
+@media (min-width: 600px) and (max-width: 900px){
+}
+#wrap #content {
+	background-color: #DEDEED;
+	padding-bottom: 20px;
+}
+
+#welcome_options {
+	list-style-type: none;
+	height: 120px;
+	margin-top: 0px;
+	padding-top: 20px;
+	padding-bottom: 0px;
+}
+#welcome_options li {
+	float: left;
+	width: 25%;
+	height: 100%;
+	font-size: 18px;
+
+}
+#welcome_options li  p {
+	margin-top: 65px;
+	text-align: center;
+
+}
+#content #welcome_options .new_app {
+	background-image: url(../resource/images/mobile.png);
+	background-repeat: no-repeat;
+	background-origin: border-box;
+	background-attachment: scroll;
+	background-position-x: center;
+	background-position-y:top ;
+}
+
+#content #welcome_options #new_UI {
+	background-image: url(../resource/images/mobile.png);
+}
+
+#content #welcome_options #new_Theme {
+}
+#content #welcome_options #open_workspace {
+}
+
+#wrap #content #welcome_links {
+}
+#wrap #content #welcome_links li {
+	float: left;
+	width: 25%;
+	display: inherit;
+	list-style-type: none;
+	text-align: center;
+}
+#wrap #content #welcome_links li a {
+	color: #B3B3B3;
+	text-indent: 0px;
+	text-align: center;
+	text-decoration: none;
+
+
+}

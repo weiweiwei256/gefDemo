@@ -1,0 +1,45 @@
+/* CSS Document */
+/*这里存储多个页面的公共样式信息.例如:标题,logo,尾页等*/
+#wrapper {
+	border: 0;
+	margin: 0 auto;
+	text-align: left;
+	background-color: #FFFFFF;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 1100px;
+	overflow-x: auto;
+	overflow-y: auto;
+}
+#wrapper #header {
+	width: 100%;
+	height: 90px;
+	background-color: #6699CC;
+	background-image: url(../resource/images/abide_64_64.png);
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+}
+#wrapper #header #header_title {
+	display: inherit;
+	text-align: center;
+	width: 100%;
+	font-weight: 600;
+	font-size: xx-large;
+	font-style: normal;
+	color: #FFFFFF;
+	padding-top: 20px;
+	margin: 0 auto;
+	height: auto;
+}
+#wrapper #mainContent {
+	background-color: #D5F4F7;
+	width: 100%;
+}
+#wrapper #mainContent ul {
+	margin-bottom: 0px;
+	margin-top: 0px;
+}
+
+#wrapper #mainContent ul li h4 {
+	text-align: center;
+}

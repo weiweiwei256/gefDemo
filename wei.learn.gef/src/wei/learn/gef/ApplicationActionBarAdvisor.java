@@ -12,6 +12,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 import wei.learn.gef.action.DiagramAction;
+import wei.learn.gef.action.JCEFAction;
 
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
@@ -21,6 +22,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// private IAction redoAction;
 	// private IAction deleteAction;
 	private DiagramAction diagramAction;
+	private JCEFAction  jcefAction;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -33,6 +35,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(aboutAction);
 		diagramAction = new DiagramAction(window);
 		register(diagramAction);
+		jcefAction = new JCEFAction(window);
+		register(jcefAction);
 		// undoAction = ActionFactory.UNDO.create(window);
 		// register(undoAction);
 		// redoAction = ActionFactory.REDO.create(window);
@@ -44,6 +48,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillMenuBar(IMenuManager menuBar) {
 		MenuManager fileMenu = new MenuManager("&File", "file");
 		fileMenu.add(diagramAction);
+		fileMenu.add(jcefAction);
 		fileMenu.add(new Separator());
 		fileMenu.add(exitAction);
 		MenuManager helpMenu = new MenuManager("&Help", "help");

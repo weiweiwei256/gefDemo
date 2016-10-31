@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-flat-20030114.dtd">
+<!-- Created by SVGDeveloper 1.0 -->
+<svg width="640" height="480" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<rect x="115" y="116" width="224" height="141" fill="#FFFFFF" stroke="#CCCCCC" stroke-opacity="1" stroke-dasharray="5 5 5" fill-rule="nonzero" stroke-dashoffset="2" stroke-width="2" stroke-linejoin="bevel" stroke-linecap="round" />
+	<rect x="489" y="39" width="114" height="131" fill="#FFFFFF" stroke="#CCCCCC" stroke-opacity="1" transform="matrix(1,0,0,1,-10,82)" stroke-dasharray="5 5 5" fill-rule="nonzero" stroke-dashoffset="2" stroke-width="2" stroke-linejoin="bevel" stroke-linecap="round" />
+	<rect x="112" y="12" width="227" height="47" fill="#FFFFFF" stroke="#CCCCCC" stroke-opacity="1" stroke-dasharray="5 5 5" fill-rule="nonzero" stroke-dashoffset="2" stroke-width="2" stroke-linejoin="bevel" stroke-linecap="round" />
+	<rect x="167" y="125" width="134" height="45" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" />
+	<rect x="165" y="206" width="138" height="46" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" transform="matrix(0.9714286,0,0,0.979167,4.685699,4.270767)" />
+	<rect x="498" y="130" width="69" height="24" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" transform="matrix(1,0,0,1,6,2)" xmlns="http://www.w3.org/2000/svg" />
+	<rect x="498" y="163" width="71" height="27" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" transform="matrix(0.9726008,0,0,0.8965518,19.61637,18.75856)" xmlns="http://www.w3.org/2000/svg" />
+	<rect x="497" y="198" width="73" height="29" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" transform="matrix(0.947,0,0,0.8389999,32.45362,34.77399)" xmlns="http://www.w3.org/2000/svg" />
+	<rect x="120" y="22" width="51" height="28" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" transform="matrix(1.038,0,0,0.933,-0.491,-0.6)" />
+	<rect x="194" y="23" width="52" height="26" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" transform="matrix(1.019,0,0,1,1.926,-2.5)" />
+	<rect x="271" y="25" width="53" height="26" fill="#99FFFF" stroke="#0033FF" stroke-width="2" stroke-dasharray="none" transform="matrix(1,0,0,1,4,-5)" />
+	<text x="184" y="135" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" alignment-baseline="text-before-edge" letter-spacing="1" transform="matrix(1,0,0,1,-2,7)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round">
+		<tspan>
+		     TAD</tspan>
+		<tspan x="184" dy="20.32031">
+		交易装配定义</tspan>
+	</text>
+	<text x="189" y="216" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" alignment-baseline="text-before-edge" letter-spacing="1" word-spacing="1" text-decoration="none" transform="matrix(1,0,0,1,-20,7)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+<tspan>
+		       MPT</tspan>
+<tspan x="189" dy="20.32031">
+		交易主流程模版</tspan>
+<tspan x="189" dy="20.32031">
+</tspan>
+</text>
+	<text x="134" y="33" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" transform="matrix(1,0,0,1,0,7)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round">
+	ADE</text>
+	<text x="215" y="29" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" transform="matrix(1,0,0,1,-8,11)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round">
+	DNC</text>
+	<text x="289" y="32" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" transform="matrix(1,0,0,1,-1,8)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round">
+	SDB</text>
+	<text x="513" y="144" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" transform="matrix(1,0,0,0.938,11.999,12.803)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+	ALR</text>
+	<text x="513" y="176" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" transform="matrix(1,0,0,0.938,13.999,17.698)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+	ALR</text>
+	<text x="513" y="210" xml:space="default" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" transform="matrix(1,0,0,0.938,13.999,22.593)" stroke-miterlimit="1" font-stretch="normal" font-style="normal" font-variant="normal" font-weight="lighter" stroke-linecap="square" fill-rule="inherit" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+	ALR</text>
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(0.9999999,0,0,1.21,-1.000038,-15.43)" />
+	<line x1="219" y1="73" x2="226" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" />
+	<line x1="233" y1="72" x2="225" y2="64" stroke="#663399" stroke-opacity="1" stroke-width="3" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.001,-0.001,-0.823,452.16,255.472)" />
+	<line x1="219" y1="73" x2="226" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.001,-0.001,-0.68,451.145,244.981)" />
+	<line x1="233" y1="72" x2="225" y2="64" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.001,-0.001,-0.884,451.165,258.853)" />
+	<text x="130" y="134" xml:space="preserve" writing-mode="tb" font-family="Microsoft YaHei UI" font-size="16" fill="#000000" stroke="#0066FF" stroke-width="1" baseline-shift="baseline" stroke-miterlimit="1" transform="matrix(1,0,0,1,6,6)">交易主流程</text>
+	<text x="248" y="80" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" baseline-shift="baseline" transform="matrix(1,0,0,1,-7,9)">指定交易数据</text>
+	<line x1="233" y1="72" x2="225" y2="64" stroke="#CCCCCC" stroke-opacity="1" stroke-width="4" transform="matrix(0.033,-1.4,2.693,0.017,168.187,499.342)" stroke-dasharray="none" />
+	<line x1="219" y1="73" x2="226" y2="65" stroke="#CCCCCC" stroke-opacity="1" stroke-width="4" transform="matrix(0.281,-1.372,2.647,0.495,115.07,462.415)" stroke-dasharray="none" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#CCCCCC" stroke-opacity="1" stroke-width="4" transform="matrix(0.033,-1.4,3.259,0.021,131.993,500.512)" stroke-dasharray="none" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.001,-0.001,-1.103,453.193,371.697)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-0.001,-1,9.045,-0.008,-505.672,526.557)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-1.103,308.1938,408.697)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-1.103,416.5272,408.697)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-1.103,524.8606,408.697)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-1.103,633.194,408.697)" />
+	<rect x="55" y="340" width="50" height="32" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(1,0,0,1,0,-2)" />
+	<rect x="165" y="338" width="49" height="31" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(1.019608,0,0,1.030302,-3.215956,-9.211761)" />
+	<rect x="265" y="343" width="57" height="26" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(0.881356,0,0,1.214286,37.32187,-78.28572)" />
+	<rect x="386" y="337" width="53" height="31" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(0.9454549,0,0,1.030302,15.9994,-9.18152)" />
+	<text x="61" y="354" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(1,0,0,1,4,7)">LFC</text>
+	<text x="173" y="350" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(0.823292,0,0,0.9999999,34.58128,10.99998)">RCD</text>
+	<text x="281" y="355" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(0.8899989,0,0,1.030802,34.76467,-4.546519)">AFT</text>
+	<text x="392" y="347" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(0.8276589,0,0,1.015364,71.32957,8.862254)">AUF</text>
+	<text x="504" y="100" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" baseline-shift="baseline" transform="matrix(1,0,0,1,7,9)">SEDA</text>
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-0.758,307.165,447.074)" />
+	<rect x="55" y="340" width="50" height="32" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(1.679,0,0,1,-53.342,60)" />
+	<text x="69" y="412" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(1,0,0,1,-22,10)">
+	技术组件</text>
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-0.758,633.165,447.074)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-0.001,-1,4.328,-0.004,46.865,624.215)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-0.758,633.165,474.074)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-0.758,710.165,473.074)" />
+	<line x1="227" y1="101" x2="227" y2="65" stroke="#663399" stroke-opacity="1" stroke-width="3" transform="matrix(-1,0.0009999999,-0.001,-0.758,556.1653,474.074)" />
+	<rect x="265" y="343" width="57" height="26" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(1.076,0,0,1.139,13.017,30.707)" />
+	<rect x="265" y="343" width="57" height="26" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(1.076001,0,0,1.139,90.89603,30.80997)" />
+	<rect x="265" y="343" width="57" height="26" fill="#99FFFF" stroke="#0033FF" stroke-width="2" transform="matrix(1.076001,0,0,1.139,168.8896,30.80995)" />
+	<text x="330" y="443" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(1,0,0,1,-28,0)" xmlns="http://www.w3.org/2000/svg">
+	ABF</text>
+	<text x="395" y="441" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(0.8519999,0,0,0.9999999,36.09555,1.857948)" xmlns="http://www.w3.org/2000/svg">
+	ABF4A</text>
+	<text x="456" y="437" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" letter-spacing="1" baseline-shift="baseline" transform="matrix(1,0,0,1,-6,6)" xmlns="http://www.w3.org/2000/svg">
+	HTML</text>
+	<text x="513" y="237" xml:space="preserve" font-family="Microsoft YaHei UI" font-size="16" fill="#0000CC" stroke="#0066FF" baseline-shift="baseline" transform="matrix(1.93,0,0,0.9999999,-462.496,-2.595367E-05)" xmlns="http://www.w3.org/2000/svg">
+...</text>
+</svg>
